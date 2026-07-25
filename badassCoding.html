@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Da Vinci Science Quest</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Lora:ital,wght@0,400;0,600;1,400&family=Source+Sans+3:wght@300;400;600&family=Kanit:wght@300;400;600&display=swap');
+
+  :root {
+    --ink: #4A1D2F;              /* Deep Dusty Rose/Plum for text & rich contrast */
+    --parchment: #FFF0F5;        /* Soft Lavender Blush / Pale Pink Background */
+    --parchment-dark: #FAD0DD;   /* Pastel Pink (Containers & Accents) */
+    --sepia: #D87093;            /* Medium Pale Violet Red (Primary Pink Accent) */
+    --sepia-light: #E8A0BF;      /* Soft Rose Pink */
+    --indigo: #C75B7A;           /* Deep Rose/Magenta Accent for main buttons */
+    --verdigris: #B05279;        /* Rich Berry/Deep Rose for Correct state */
+    --crimson: #B83B5E;          /* Vibrant Crimson Rose for Errors/Skip */
+    --card-bg: #F8E1E7;          /* Soft Monotone Pink for question card */
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Kanit', 'Lora', serif;
+    background: var(--parchment);
+    color: var(--ink);
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(216, 112, 147, 0.12) 31px, rgba(216, 112, 147, 0.12) 32px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(216, 112, 147, 0.08) 39px, rgba(216, 112, 147, 0.08) 40px);
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--ink);
+    padding: clamp(10px, 2vh, 18px) clamp(14px, 3vw, 24px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid var(--sepia-light);
+    flex-shrink: 0;
+  }
+  .header-left { display: flex; align-items: center; gap: clamp(8px, 2vw, 16px); }
+  .header-icon { font-size: clamp(24px, 5vw, 36px); }
+  .header-text h1 {
+    font-family: 'Cinzel', serif;
+    color: #FFF0F5;
+    font-size: clamp(14px, 3.5vw, 22px);
+    letter-spacing: 2px;
+    font-weight: 900;
+  }
+  .header-text p { color: #F8E1E7; font-size: clamp(10px, 2vw, 12px); font-style: italic; }
+
+  /* ── MAIN CONTAINER ── */
+  .main {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: clamp(12px, 2vh, 24px) clamp(10px, 3vw, 16px);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* ── TOPIC CARDS GRID ── */
+  .topic-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(10px, 2vw, 16px);
+    margin-bottom: clamp(10px, 2vw, 16px);
+  }
+  @media (max-width: 650px) { .topic-grid { grid-template-columns: 1fr; } }
+
+  .topic-card {
+    border: 2px solid;
+    border-radius: 6px;
+    padding: clamp(12px, 2vh, 18px) clamp(14px, 2vw, 20px);
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: #FFF;
+  }
+  .topic-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
+  .topic-card.primary-low { border-color: #E8A0BF; background: #FFF0F5; }
+  .topic-card.primary-low::before { background: #E8A0BF; }
+  .topic-card.primary-high { border-color: #D87093; background: #FFF0F5; }
+  .topic-card.primary-high::before { background: #D87093; }
+  .topic-card.secondary-low { border-color: #C75B7A; background: #FFF0F5; }
+  .topic-card.secondary-low::before { background: #C75B7A; }
+  .topic-card.secondary-high { border-color: #B05279; background: #FFF0F5; }
+  .topic-card.secondary-high::before { background: #B05279; }
+
+  .topic-card.random-mode {
+    grid-column: 1 / -1;
+    border-color: var(--ink);
+    background: var(--parchment-dark);
+    margin-bottom: clamp(16px, 3vh, 28px);
+  }
+  .topic-card.random-mode::before { background: var(--ink); }
+
+  .topic-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(74, 29, 47, 0.15); }
+  .topic-card.selected { box-shadow: 0 0 0 3px var(--indigo), 0 6px 20px rgba(74, 29, 47, 0.2); }
+
+  .topic-icon { font-size: clamp(22px, 4vw, 28px); margin-bottom: 6px; }
+  .topic-card h3 { font-family: 'Kanit', sans-serif; font-size: clamp(14px, 2.8vw, 16px); font-weight: 600; margin-bottom: 4px; color: var(--ink); }
+  .topic-card p { font-size: clamp(11px, 2vw, 12px); color: #7A4B5C; line-height: 1.4; }
+
+  /* ── PLAY BUTTON ── */
+  .play-section { text-align: center; margin-bottom: 16px; }
+  .btn-play {
+    background: var(--ink);
+    color: #FFF0F5;
+    border: 2px solid var(--sepia-light);
+    font-family: 'Cinzel', serif;
+    font-size: clamp(12px, 2.5vw, 14px);
+    letter-spacing: 3px;
+    padding: clamp(10px, 2vh, 14px) clamp(24px, 5vw, 40px);
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .btn-play:hover:not(:disabled) { background: var(--indigo); color: #FFF; box-shadow: 0 4px 16px rgba(232, 160, 191, 0.5); }
+  .btn-play:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* ── GAME ARENA ── */
+  #game-arena { display: none; width: 100%; }
+  .game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: clamp(10px, 2vh, 16px);
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--parchment-dark);
+  }
+  .game-info { font-family: 'Kanit', sans-serif; font-size: clamp(11px, 2vw, 13px); letter-spacing: 1px; color: #7A4B5C; font-weight: 600; text-transform: uppercase; }
+  .score-display { font-family: 'Cinzel', serif; color: var(--ink); font-size: clamp(14px, 3vw, 18px); font-weight: 900; }
+
+  /* ── QUESTION CARD & IMAGE CANVAS ── */
+  .question-card {
+    background: var(--card-bg);
+    border: 2px solid var(--sepia-light);
+    border-radius: 8px;
+    padding: clamp(16px, 3vh, 28px) clamp(16px, 3vw, 28px);
+    box-shadow: 0 4px 20px rgba(74, 29, 47, 0.1);
+  }
+  
+  .room-container {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: var(--parchment);
+    border: 2px dashed var(--indigo);
+    border-radius: 6px;
+    margin-bottom: clamp(12px, 2vh, 20px);
+    overflow: hidden;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .room-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink);
+    font-family: 'Kanit', sans-serif;
+    font-size: clamp(12px, 2vw, 16px);
+  }
+
+  .question-topic-tag {
+    font-family: 'Kanit', sans-serif;
+    font-size: clamp(10px, 1.8vw, 12px);
+    letter-spacing: 1px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .question-text {
+    font-size: clamp(14px, 2.5vw, 18px);
+    line-height: 1.5;
+    color: var(--ink);
+    margin-bottom: clamp(12px, 2vh, 20px);
+    font-weight: 600;
+  }
+
+  /* ── ANSWER OPTIONS ── */
+  .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(8px, 1.5vw, 12px); }
+  @media (max-width: 550px) { .options-grid { grid-template-columns: 1fr; } }
+  .option-btn {
+    background: #FFFFFF;
+    border: 2px solid var(--parchment-dark);
+    border-radius: 6px;
+    padding: clamp(10px, 1.8vh, 14px) clamp(12px, 2vw, 16px);
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.18s;
+    font-family: 'Kanit', sans-serif;
+    font-size: clamp(13px, 2.2vw, 15px);
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
+  .option-btn:hover:not(:disabled) { border-color: var(--indigo); background: var(--parchment); }
+  .option-btn .opt-label { font-family: 'Cinzel', serif; font-size: 13px; font-weight: 900; color: var(--indigo); min-width: 18px; }
+  .option-btn.correct { border-color: var(--verdigris); background: #FCE4EC; color: #7A2846; font-weight: bold; }
+  .option-btn.wrong { border-color: var(--crimson); background: #FFEBEE; color: #9A1B36; }
+  .option-btn:disabled { cursor: not-allowed; }
+
+  /* ── ACTION BAR & HINT ── */
+  .action-bar { display: flex; gap: 10px; margin-top: 16px; justify-content: space-between; align-items: center; }
+  .btn-action {
+    font-family: 'Kanit', sans-serif;
+    font-size: clamp(11px, 2vw, 13px);
+    padding: clamp(8px, 1.5vh, 12px) clamp(14px, 3vw, 20px);
+    cursor: pointer;
+    border-radius: 4px;
+    transition: opacity 0.3s ease, background 0.2s;
+    border: none;
+  }
+  
+  .btn-hint {
+    background: var(--parchment-dark);
+    color: var(--ink);
+    font-weight: 600;
+    display: none;
+    border: 1px solid var(--sepia-light);
+  }
+  .btn-hint:hover:not(:disabled) { background: var(--sepia-light); color: var(--ink); }
+  .btn-hint:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .btn-skip { 
+    background: transparent; 
+    border: 1.5px solid var(--crimson); 
+    color: var(--crimson); 
+    opacity: 0; 
+    pointer-events: none; 
+    font-weight: 600;
+  }
+  .btn-skip.visible { 
+    opacity: 1; 
+    pointer-events: auto; 
+  }
+  .btn-skip:hover { background: rgba(184, 59, 94, 0.15); }
+  
+  .btn-next { background: var(--ink); color: #FFF0F5; font-weight: 600; display: none; }
+  .btn-next:hover { background: var(--indigo); color: white; }
+
+  /* ── FEEDBACK BOX ── */
+  .feedback-box {
+    margin-top: 12px;
+    padding: clamp(10px, 1.5vh, 14px) 16px;
+    border-radius: 4px;
+    font-size: clamp(12px, 2vw, 14px);
+    line-height: 1.5;
+    display: none;
+  }
+  .feedback-box.correct-fb { background: #FCE4EC; border-left: 4px solid var(--verdigris); color: #5C1D33; }
+  .feedback-box.wrong-fb { background: #FFEBEE; border-left: 4px solid var(--crimson); color: #7A1B2E; }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar { height: 6px; background: var(--parchment-dark); border-radius: 3px; margin-bottom: 16px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--indigo), var(--sepia-light)); transition: width 0.4s ease; }
+
+  /* ── RESULTS SCREEN ── */
+  #results-screen { display: none; text-align: center; }
+  .results-card {
+    background: #FFFFFF;
+    border: 2px solid var(--sepia-light);
+    border-radius: 8px;
+    padding: clamp(24px, 5vh, 40px) clamp(16px, 4vw, 32px);
+    box-shadow: 0 8px 32px rgba(74, 29, 47, 0.15);
+  }
+  .results-seal { font-size: clamp(48px, 10vw, 64px); margin-bottom: 12px; }
+  .results-card h2 { font-family: 'Cinzel', serif; font-size: clamp(18px, 4vw, 26px); color: var(--indigo); letter-spacing: 2px; margin-bottom: 8px; }
+  .results-score { font-family: 'Cinzel', serif; font-size: clamp(28px, 8vw, 48px); color: var(--ink); font-weight: 900; margin: 10px 0; }
+  .results-message { font-style: italic; color: #7A4B5C; font-size: clamp(13px, 2.5vw, 15px); margin-bottom: 24px; line-height: 1.6; }
+  .btn-restart {
+    background: var(--ink);
+    color: #FFF0F5;
+    border: 2px solid var(--sepia-light);
+    font-family: 'Kanit', sans-serif;
+    font-size: clamp(12px, 2vw, 14px);
+    padding: 12px 24px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+    font-weight: 600;
+  }
+  .btn-restart:hover { background: var(--indigo); color: #FFF; }
+
+  /* ── TIMER & LANG BUTTONS ── */
+  .timer-display { font-family: 'Cinzel', serif; color: var(--ink); font-size: clamp(13px, 2.5vw, 15px); font-weight: bold; }
+  .timer-display.urgent { color: var(--crimson); animation: pulse 0.8s infinite; }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
+
+  .lang-group { display: flex; gap: 6px; }
+  .btn-lang {
+    background: transparent;
+    border: 1.5px solid rgba(255,240,245,0.4);
+    color: #F8E1E7;
+    font-family: 'Kanit', sans-serif;
+    font-size: clamp(10px, 2vw, 12px);
+    padding: 4px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-lang:hover, .btn-lang.active { border-color: #FFF0F5; color: #FFF0F5; background: rgba(255,240,245,0.15); }
+
+  .trans-display {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.6);
+    border-left: 3px solid var(--indigo);
+    font-size: clamp(12px, 2.2vw, 14px);
+    color: var(--ink);
+    display: none;
+    border-radius: 0 4px 4px 0;
+  }
+  .trans-display.visible { display: block; }
+  .trans-opt { font-size: 11px; color: #7A4B5C; display: block; margin-top: 2px; }
+  .translate-status { font-size: 11px; color: var(--indigo); font-style: italic; display: none; }
+  .section-divider { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .section-divider h2 { font-family: 'Kanit', sans-serif; font-size: clamp(12px, 2vw, 14px); letter-spacing: 1px; color: var(--ink); text-transform: uppercase; font-weight: 600; }
+  .divider-line { flex: 1; height: 1px; background: var(--parchment-dark); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <div class="header-icon">⚗️</div>
+    <div class="header-text">
+      <h1>SCIENCE QUEST</h1>
+      <p>Science Week · Interactive Edition</p>
+    </div>
+  </div>
+  <div class="lang-group">
+    <button class="btn-lang active" id="lang-th" onclick="setLanguage('th')">🇹🇭 TH</button>
+    <button class="btn-lang" id="lang-en" onclick="setLanguage('en')">🇬🇧 EN</button>
+    <button class="btn-lang" id="lang-zh" onclick="setLanguage('zh')">🇨🇳 ZH</button>
+  </div>
+</div>
+
+<!-- MAIN CONTAINER -->
+<div class="main">
+
+  <!-- SETUP SCREEN -->
+  <div id="setup-screen">
+    <div class="section-divider">
+      <div class="divider-line"></div>
+      <h2>เลือกระดับชั้น (Select Grade Level)</h2>
+      <div class="divider-line"></div>
+    </div>
+
+    <!-- TOPIC GRID -->
+    <div class="topic-grid">
+      <div class="topic-card primary-low" data-topic="primary-low" onclick="selectTopic(this)">
+        <div class="topic-icon">🌱</div>
+        <h3>ประถมต้น</h3>
+        <p>เรียนรู้เรื่องสีของพืช ผักผลไม้ และหน้าที่เบื้องต้น</p>
+      </div>
+      <div class="topic-card primary-high" data-topic="primary-high" onclick="selectTopic(this)">
+        <div class="topic-icon">🌿</div>
+        <h3>ประถมปลาย</h3>
+        <p>ทำความรู้จักกับสารแอนโทไซยานินและสมบัติทางกายภาพ</p>
+      </div>
+      <div class="topic-card secondary-low" data-topic="secondary-low" onclick="selectTopic(this)">
+        <div class="topic-icon">🧪</div>
+        <h3>มัธยมต้น</h3>
+        <p>เจาะลึกโครงสร้างเซลล์ การเปลี่ยนสีตาม pH และตัวอย่างพืช</p>
+      </div>
+      <div class="topic-card secondary-high" data-topic="secondary-high" onclick="selectTopic(this)">
+        <div class="topic-icon">🔬</div>
+        <h3>มัธยมปลาย</h3>
+        <p>กลไกทางเคมี โครงสร้างโมเลกุล และ Photoprotection</p>
+      </div>
+
+      <!-- RANDOM MODE -->
+      <div class="topic-card random-mode" data-topic="random" onclick="selectTopic(this)">
+        <div class="topic-icon">🎲</div>
+        <h3>RANDOM MODE (สุ่มทุกระดับ)</h3>
+        <p>สุ่มคำถามจากทุกระดับชั้นเพื่อทดสอบความรู้รอบตัว!</p>
+      </div>
+    </div>
+
+    <div class="play-section">
+      <button class="btn-play" id="btn-play" onclick="startGame()" disabled>✦ เริ่มการแข่งขัน ✦</button>
+    </div>
+  </div>
+
+  <!-- GAME ARENA -->
+  <div id="game-arena">
+    <div class="game-header">
+      <div>
+        <div class="game-info" id="topic-label">—</div>
+        <div class="game-info" id="question-counter">ข้อที่: 0 / 5</div>
+      </div>
+      <div style="text-align:right">
+        <div class="timer-display" id="timer-display">⏱ 30s</div>
+        <div class="score-display" id="score-display">0 pts</div>
+      </div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+
+    <div class="question-card">
+      <div class="question-topic-tag" id="q-tag">🌿 <span>ระดับชั้น</span></div>
+
+      <!-- 1920x1080 ROOM / CONTEXT IMAGE CANVAS (Hidden until Hint used) -->
+      <div class="room-container" id="room-container">
+        <div class="room-placeholder" id="room-placeholder">
+          <span>🖼️ รูปภาพประกอบคำถาม (Hint Picture)</span>
+        </div>
+      </div>
+
+      <div class="question-text" id="q-text">กำลังโหลดคำถาม...</div>
+      <div class="trans-display" id="trans-q"></div>
+      <div class="translate-status" id="translate-status">⏳ กำลังแปล...</div>
+      <div class="options-grid" id="options-grid"></div>
+      <div class="feedback-box" id="feedback-box"></div>
+
+      <div class="action-bar">
+        <button class="btn-action btn-hint" id="btn-hint" onclick="useHint()">💡 แสดงรูปคำใบ้ (<span id="hints-left">2</span>/2)</button>
+        <div>
+          <button class="btn-action btn-skip" id="btn-skip" onclick="skipQuestion()">ข้ามคำถาม ⏭</button>
+          <button class="btn-action btn-next" id="btn-next" onclick="nextQuestion()">ข้อถัดไป →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div id="results-screen">
+    <div class="results-card">
+      <div class="results-seal" id="results-seal">🏅</div>
+      <h2 id="results-title">QUEST COMPLETE</h2>
+      <div class="results-score"><span id="results-score-num">0</span><span> PTS</span></div>
+      <div class="results-message" id="results-message"></div>
+      <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap">
+        <button class="btn-restart" onclick="restart()">↺ เล่นอีกครั้ง</button>
+        <button class="btn-restart" onclick="backToMenu()" style="background:var(--indigo); border-color:var(--indigo)">☰ หน้าหลัก</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ══════════════════════════════════════════════════
+//  THAI QUESTIONS BANK (Organized by Grade Level)
+// ══════════════════════════════════════════════════
+const QUESTIONS = [
+  // --- ประถมต้น (5 Questions) ---
+  { id: 1, topic: "primary-low", visual: "🥬", q: "สารสีเขียวในใบไม้ เช่น ใบผักบุ้ง หรือ บรอกโคลี ทำหน้าที่เปรียบเหมือนอะไรของพืช?", options: ["เป็นร่มกันแดด", "เป็นห้องครัวทำอาหาร", "เป็นป้ายไฟเรียกดึงดูดแมลง", "เป็นเกราะป้องกันเชื้อโรค"], answer: "เป็นห้องครัวทำอาหาร", explain: "สีเขียวในพืชทำหน้าที่สร้างอาหารจากแสงแดด เปรียบเหมือน 'ห้องครัว' ของต้นไม้" },
+  { id: 2, topic: "primary-low", visual: "🌸", q: "ดอกไม้สีสดใส เช่น ดอกอัญชันสีน้ำเงิน หรือดอกไม้สีแดง มีสีสันสวยงามไว้เพื่อประโยชน์อะไรเป็นหลัก?", options: ["ดึงดูดผีเสื้อและแมลงให้มาช่วยผสมเกสร", "ทำให้ต้นไม้หนักขึ้น", "ช่วยให้ต้นไม้คายน้ำได้เร็วขึ้น", "ช่วยบังแสงแดดให้รากพืช"], answer: "ดึงดูดผีเสื้อและแมลงให้มาช่วยผสมเกสร", explain: "สีสันที่สดใสของดอกไม้ช่วยเรียกแมลง เช่น ผึ้งและผีเสื้อ ให้บินมาดมกลิ่นและช่วยตักเกสรไปผสมพันธุ์" },
+  { id: 3, topic: "primary-low", visual: "🥕", q: "ถ้าเด็กๆ อยากตาไบรท์ บำรุงสายตาให้มองเห็นชัดเจน ควรเลือกกินผักผลไม้กลุ่มสีใด?", options: ["สีเขียว เช่น ผักบุ้ง", "สีส้ม-สีเหลือง เช่น แครอท และ ฟักทอง", "สีขาว เช่น หัวไชเท้า", "สีน้ำตาล เช่น เห็ด"], answer: "สีส้ม-สีเหลือง เช่น แครอท และ ฟักทอง", explain: "ผักผลไม้สีส้มและเหลืองมีสารอาหารที่ช่วยบำรุงสายตา ทำให้มองเห็นชัดเจน" },
+  { id: 4, topic: "primary-low", visual: "🍇", q: "ผักผลไม้กลุ่มสีแดง-ม่วง เช่น สตรอว์เบอร์รี มะเขือยาวสีม่วง หรือ องุ่น มีประโยชน์ต่อร่างกายอย่างไร?", options: ["ช่วยบำรุงหัวใจ และทำให้ร่างกายแข็งแรงไม่ป่วยง่าย", "ทำให้ฟันหลุดง่าย", "ทำให้ง่วงนอนตลอดเวลา", "ทำให้วิ่งเร็วขึ้นทันที"], answer: "ช่วยบำรุงหัวใจ และทำให้ร่างกายแข็งแรงไม่ป่วยง่าย", explain: "ผักผลไม้สีแดงและม่วงเปรียบเหมือน 'เกราะป้องกัน' ที่ช่วยให้หัวใจแข็งแรงและสร้างภูมิคุ้มกันโรค" },
+  { id: 5, topic: "primary-low", visual: "🎃", q: "ข้อใดคือ 'ผักและผลไม้กลุ่มสีส้ม-สีเหลือง' ทั้งหมด?", options: ["กะหล่ำปลีสีม่วง และ ดอกอัญชัน", "บรอกโคลี และ ผักบุ้ง", "ฟักทอง และ มะละกอสุก", "หัวไชเท้า และ กระเทียม"], answer: "ฟักทอง และ มะละกอสุก", explain: "ทั้งฟักทองและมะละกอสุกมีเนื้อสีส้ม-เหลืองชัดเจน อยู่ในกลุ่มสารอาหารบำรุงสายตา" },
+
+  // --- ประถมปลาย (5 Questions) ---
+  { id: 6, topic: "primary-high", visual: "🟣", q: "สารแอนโทไซยานิน (Anthocyanin) ทำให้พืชมีสีอะไรบ้าง?", options: ["สีเขียวและสีเหลือง", "สีแดง สีม่วง และสีน้ำเงิน", "สีส้มและสีขาว", "ไม่มีสี"], answer: "สีแดง สีม่วง และสีน้ำเงิน", explain: "แอนโทไซยานินเป็นรงควัตถุหรือสารสีที่ทำให้พืชมีสีโทนเข้ม เช่น แดง ม่วง และน้ำเงิน ส่วนสีเขียวเกิดจากคลอโรฟิลล์" },
+  { id: 7, topic: "primary-high", visual: "🌺", q: "เราสามารถพบสารแอนโทไซยานินมากที่สุดในส่วนใดของพืช?", options: ["รากแก้วใต้ดิน", "ดอกและผลไม้", "ท่อน้ำและท่ออาหาร", "แก่นลำต้น"], answer: "ดอกและผลไม้", explain: "สารนี้มักสะสมอยู่ในส่วนที่ต้องการดึงดูดแมลงหรือสัตว์ เช่น กลีบดอกไม้ และเปลือกหรือเนื้อของผลไม้" },
+  { id: 8, topic: "primary-high", visual: "💧", q: "สมบัติทางกายภาพที่สำคัญของสารแอนโทไซยานินคือข้อใด?", options: ["ไม่ละลายน้ำและไม่ละลายในแอลกอฮอล์", "ละลายในน้ำได้ดี", "ระเหยกลายเป็นไอได้ง่ายเมื่อโดนแดด", "เปลี่ยนเป็นก๊าซออกซิเจน"], answer: "ละลายในน้ำได้ดี", explain: "แอนโทไซยานินมีสมบัติละลายน้ำได้ดี สังเกตได้จากตอนต้มดอกอัญชันหรือกะหล่ำปลีม่วง น้ำจะเปลี่ยนสีทันที" },
+  { id: 9, topic: "primary-high", visual: "🍆", q: "พืชในข้อใดมีส่วนประกอบของสารแอนโทไซยานินที่เด่นชัด?", options: ["คะน้าและผักกาดขาว", "ดอกอัญชันและกะหล่ำปลีม่วง", "มันเทศสีเหลืองและข้าวโพดหวาน", "แตงกวาและมะนาว"], answer: "ดอกอัญชันและกะหล่ำปลีม่วง", explain: "พืชทั้งสองชนิดนี้มีสีม่วงและน้ำเงินที่เข้มมาก ซึ่งเป็นเอกลักษณ์ของสารแอนโทไซยานิน" },
+  { id: 10, topic: "primary-high", visual: "🛡️", q: "ประโยชน์หลักของสารแอนโทไซยานินต่อร่างกายมนุษย์คืออะไร?", options: ["ช่วยเพิ่มความสูงของกระดูก", "เป็นสารต้านอนุมูลอิสระ ช่วยบำรุงสุขภาพ", "ทำให้ฟันแข็งแรงขึ้น", "เพิ่มไขมันดีในเส้นเลือดทันที"], answer: "เป็นสารต้านอนุมูลอิสระ ช่วยบำรุงสุขภาพ", explain: "แอนโทไซยานินช่วยปกป้องเซลล์ในร่างกาย ลดความเสี่ยงของโรค และช่วยบำรุงสายตา" },
+
+  // --- มัธยมต้น (5 Questions) ---
+  { id: 11, topic: "secondary-low", visual: "🔬", q: "สารแอนโทไซยานิน (Anthocyanin) เป็นสารสีที่ละลายน้ำได้ มักถูกเก็บสะสมไว้ในออร์แกเนลล์ใดของเซลล์พืช?", options: ["คลอโรพลาสต์ (Chloroplast)", "ไมโทคอนเดรีย (Mitochondria)", "แวคิวโอล (Vacuole)", "รีโบโซม (Ribosome)"], answer: "แวคิวโอล (Vacuole)", explain: "แวคิวโอลทำหน้าที่เก็บสะสมน้ำและสารละลายต่างๆ ในเซลล์พืช รวมถึงสารสีที่ละลายน้ำได้อย่างแอนโทไซยานิน" },
+  { id: 12, topic: "secondary-low", visual: "🧪", q: "ถ้านำน้ำกะหล่ำปลีสีม่วง (ซึ่งมีสารแอนโทไซยานิน) ไปหยดใส่ในสารละลายชนิดหนึ่ง แล้วพบว่าเปลี่ยนเป็นสีเขียว-เหลือง แสดงว่าสารละลายนั้นมีสมบัติอย่างไร?", options: ["เป็นกรด", "เป็นเบส (ด่าง)", "เป็นกลาง", "เป็นสารละลายอิ่มตัว"], answer: "เป็นเบส (ด่าง)", explain: "แอนโทไซยานินเมื่อเจอสารที่มีฤทธิ์เป็นเบส (pH > 7) เช่น น้ำสบู่ หรือ ผงซักฟอก จะเปลี่ยนสีเป็นโทนเขียวหรือเหลือง" },
+  { id: 13, topic: "secondary-low", visual: "☀️", q: "ข้อใดไม่ใช่หน้าที่หรือประโยชน์ของสารแอนโทไซยานินที่มีต่อพืชในธรรมชาติ?", options: ["ช่วยดึงดูดแมลงให้มาช่วยผสมเกสร", "ช่วยกรองรังสี UV ที่เป็นอันตรายต่อเซลล์พืช", "ช่วยดูดกลืนพลังงานแสงเพื่อใช้ในกระบวนการสังเคราะห์ด้วยแสงเป็นหลัก", "ช่วยปกป้องพืชจากสภาวะความเครียดในสิ่งแวดล้อม เช่น ความเย็น"], answer: "ช่วยดูดกลืนพลังงานแสงเพื่อใช้ในกระบวนการสังเคราะห์ด้วยแสงเป็นหลัก", explain: "สารหลักที่ใช้ในการสังเคราะห์ด้วยแสงคือ คลอโรฟิลล์ (Chlorophyll) สีเขียว ไม่ใช่แอนโทไซยานิน" },
+  { id: 14, topic: "secondary-low", visual: "🍋", q: "เมื่อเราบีบน้ำมะนาวลงในน้ำดอกอัญชัน สีของน้ำอัญชันจะเปลี่ยนจากสีน้ำเงินเป็นสีม่วง เหตุการณ์นี้เกิดขึ้นเพราะเหตุใด?", options: ["น้ำมะนาวเข้าไปทำลายสารแอนโทไซยานินจนตกตะกอน", "กรดในน้ำมะนาวทำให้ค่า pH เปลี่ยน สารแอนโทไซยานินจึงเปลี่ยนสี", "ความร้อนจากการบีบน้ำมะนาวทำให้สารสีสลายตัว", "น้ำมะนาวเข้าไปเจือจางความเข้มข้นของน้ำอัญชัน"], answer: "กรดในน้ำมะนาวทำให้ค่า pH เปลี่ยน สารแอนโทไซยานินจึงเปลี่ยนสี", explain: "น้ำมะนาวมีกรดซิตริก (pH ต่ำ) ซึ่งแอนโทไซยานินมีคุณสมบัติเป็นอินดิเคเตอร์ธรรมชาติ จึงเปลี่ยนสีตามค่า pH ที่ลดลง" },
+  { id: 15, topic: "secondary-low", visual: "🍚", q: "อาหารในข้อใดที่มีปริมาณสารแอนโทไซยานินสะสมอยู่สูงที่สุด?", options: ["ข้าวโพดเหลือง และ ฟักทอง", "ผักกาดขาว และ มะละกอสุก", "ข้าวไรซ์เบอร์รี และ มะเขือยาวสีม่วง", "แครอท และ ส้ม"], answer: "ข้าวไรซ์เบอร์รี และ มะเขือยาวสีม่วง", explain: "แอนโทไซยานินเป็นสารสีที่ให้โทนสีแดง ม่วง และน้ำเงิน จึงพบมากในพืชที่มีสีเข้มกลุ่มนี้" },
+
+  // --- มัธยมปลาย (5 Questions) ---
+  { id: 16, topic: "secondary-high", visual: "🔍", q: "หากนำเซลล์กลีบดอกอัญชันไปส่องใต้กล้องจุลทรรศน์ใช้แสง จะพบสารสีแอนโทไซยานินสะสมอยู่ในออร์แกเนลล์ใดเป็นหลัก?", options: ["คลอโรพลาสต์ (Chloroplast)", "โครโมพลาสต์ (Chromoplast)", "เซนทรัลแวคิวโอล (Central Vacuole)", "ร่างแหเอนโดพลาซึม (Endoplasmic Reticulum)"], answer: "เซนทรัลแวคิวโอล (Central Vacuole)", explain: "แอนโทไซยานินเป็นสารสีที่ละลายน้ำได้ จึงสะสมอยู่ในแวคิวโอล ต่างจากคลอโรฟิลล์และแคโรทีนอยด์ที่ฝังตัวในเยื่อหุ้มไทลาคอยด์ของพลาสติด" },
+  { id: 17, topic: "secondary-high", visual: "🛡️", q: "แอนโทไซยานินมีบทบาทสำคัญอย่างไรในกระบวนการสังเคราะห์ด้วยแสงของพืช?", options: ["เป็นศูนย์กลางปฏิกิริยา (Reaction center) ในระบบแสง I และ II", "ทำหน้าที่เป็นสารสีเสริม (Accessory pigment) ดูดกลืนแสงและช่วยป้องกันอันตรายจากแสงความเข้มสูง (Photoprotection)", "คำหน้าที่ตรึงคาร์บอนไดออกไซด์ในวัฏจักรคัลวิน", "ง. เป็นสารตั้งต้นในกระบวนการถ่ายทอดอิเล็กตรอน"], answer: "ทำหน้าที่เป็นสารสีเสริม (Accessory pigment) ดูดกลืนแสงและช่วยป้องกันอันตรายจากแสงความเข้มสูง (Photoprotection)", explain: "ช่วยดูดกลืนแสงความยาวคลื่นช่วงสีเขียว/รังสี UV เพื่อปกป้องเนื้อเยื่อพืชจากการถูกทำลายด้วยแสง" },
+  { id: 18, topic: "secondary-high", visual: "🧪", q: "เมื่อนำน้ำสกัดจากกะหล่ำปลีสีม่วง (มีแอนโทไซยานิน) มาหยดลงในน้ำมัสตาร์ดหรือน้ำส้มสายชู (สภาวะเป็นกรด) จะสังเกตเห็นการเปลี่ยนแปลงสีอย่างไร?", options: ["เปลี่ยนจากสีม่วงเป็นสีเขียว/เหลือง", "เปลี่ยนจากสีม่วงเป็นสีชมพู/แดง", "เปลี่ยนจากสีม่วงเป็นสีฟ้า/น้ำเงิน", "ไม่เกิดการเปลี่ยนสี สียังคงเป็นสีม่วงเหมือนเดิม"], answer: "เปลี่ยนจากสีม่วงเป็นสีชมพู/แดง", explain: "ในสภาวะกรด (pH < 7) โครงสร้างแอนโทไซยานินจะอยู่ในรูป Flavylium cation ซึ่งดูดกลืนแสงแล้วสะท้อนสีแดง/ชมพูออกมา" },
+  { id: 19, topic: "secondary-high", visual: "⚛️", q: "สารละลายแอนโทไซยานินจะเปลี่ยนสีเมื่อ pH เปลี่ยนไป เนื่องจากเหตุผลใดทางเคมี?", options: ["เกิดการสลายตัวของพันธะโควาเลนต์อย่างสมบูรณ์จนกลายเป็นไอออนเดี่ยว", "โมเลกุลมีการรับหรือสูญเสียโปรตอน (H⁺) ส่งผลให้โครงสร้างและช่วงการดูดกลืนแสงเปลี่ยนไป", "แอนโทไซยานินตกตะกอนเมื่อเจอกรดหรือเบส", "เกิดปฏิกิริยารีดอกซ์และทำให้โลหะในโมเลกุลเปลี่ยนเลขออกซิเดชัน"], answer: "โมเลกุลมีการรับหรือสูญเสียโปรตอน (H⁺) ส่งผลให้โครงสร้างและช่วงการดูดกลืนแสงเปลี่ยนไป", explain: "การรับ/สูญเสีย H⁺ ทำให้พันธะคู่สลับพันธะเดี่ยว (Conjugated system) เปลี่ยนไป ส่งผลให้ช่วงคลื่นแสงที่ดูดกลืนเปลี่ยน สีจึงเปลี่ยนตาม pH" },
+  { id: 20, topic: "secondary-high", visual: "🧬", q: "แอนโทไซยานินจัดเป็นสารพฤกษเคมี (Phytochemical) ที่มีประโยชน์ต่อร่างกายมนุษย์ในด้านใดมากที่สุด?", options: ["เป็นแหล่งพลังงานหลักแทนคาร์โบไฮเดรต", "ช่วยทำหน้าที่เป็นสารต้านอนุมูลอิสระ (Antioxidant)", "ช่วยกระตุ้นการสร้างฮอร์โมนอินซูลินโดยตรง", "ทำหน้าที่เป็นเอนไซม์ย่อยโปรตีนในกระเพาะอาหาร"], answer: "ช่วยทำหน้าที่เป็นสารต้านอนุมูลอิสระ (Antioxidant)", explain: "แอนโทไซยานินมีโครงสร้างฟีนอลิกที่ช่วยให้อิเล็กตรอนแก่อนุมูลอิสระ ลดการอักเสบและความเสื่อมของเซลล์" }
+];
+
+// ══════════════════════════════════════════════════
+//  GAME STATE
+// ══════════════════════════════════════════════════
+let state = {
+  topic: null,
+  pool: [],
+  currentIndex: 0,
+  completedCount: 0,
+  skippedCount: 0,
+  score: 0,
+  timer: null,
+  timeLeft: 30,
+  answered: false,
+  hintsRemaining: 2,
+  hintUnlockedForCurrent: false,
+  lang: 'th'
+};
+
+const TOPIC_META = {
+  "primary-low":    { label: "🌱 ประถมต้น", color: "#E8A0BF" },
+  "primary-high":   { label: "🌿 ประถมปลาย", color: "#D87093" },
+  "secondary-low":  { label: "🧪 มัธยมต้น", color: "#C75B7A" },
+  "secondary-high": { label: "🔬 มัธยมปลาย", color: "#B05279" },
+  "random":         { label: "🎲 Random Mode", color: "#4A1D2F" }
+};
+
+let transCache = {};
+
+// ══════════════════════════════════════════════════
+//  TRANSLATION (TH / EN / ZH)
+// ══════════════════════════════════════════════════
+function setLanguage(lang) {
+  state.lang = lang;
+  document.querySelectorAll('.btn-lang').forEach(b => b.classList.remove('active'));
+  document.getElementById(`lang-${lang}`).classList.add('active');
+
+  const transBox = document.getElementById('trans-q');
+  if (lang === 'th' || document.getElementById('game-arena').style.display === 'none') {
+    transBox.classList.remove('visible');
+    document.getElementById('translate-status').style.display = 'none';
+    document.querySelectorAll('.trans-opt').forEach(el => el.remove());
+  } else {
+    const q = state.pool[state.currentIndex];
+    if (q) translateCurrentQuestion(q, lang);
+  }
+}
+
+async function gtranslate(text, targetLang) {
+  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=th&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
+  const res = await fetch(url);
+  const data = await res.json();
+  return data[0].map(chunk => chunk[0]).join('');
+}
+
+async function translateCurrentQuestion(q, lang) {
+  const transBox = document.getElementById('trans-q');
+  const status = document.getElementById('translate-status');
+  const cacheKey = `${lang}_${q.id}`;
+
+  if (transCache[cacheKey]) {
+    applyTranslation(transCache[cacheKey]);
+    return;
+  }
+
+  status.textContent = '⏳ Translating...';
+  status.style.display = 'block';
+  transBox.classList.remove('visible');
+
+  try {
+    const [transQ, ...transOpts] = await Promise.all([
+      gtranslate(q.q, lang),
+      ...q.currentOptions.map(opt => gtranslate(opt, lang))
+    ]);
+    const result = { question: transQ, options: transOpts };
+    transCache[cacheKey] = result;
+    applyTranslation(result);
+  } catch(e) {
+    status.textContent = '⚠️ Translation unavailable';
+    setTimeout(() => { status.style.display = 'none'; }, 3000);
+  }
+}
+
+function applyTranslation(data) {
+  const transBox = document.getElementById('trans-q');
+  const status = document.getElementById('translate-status');
+
+  transBox.textContent = data.question;
+  transBox.classList.add('visible');
+  status.style.display = 'none';
+
+  const optBtns = document.querySelectorAll('.option-btn');
+  optBtns.forEach((btn, i) => {
+    const existing = btn.querySelector('.trans-opt');
+    if (existing) existing.remove();
+    if (data.options && data.options[i]) {
+      const span = document.createElement('span');
+      span.className = 'trans-opt';
+      span.textContent = data.options[i];
+      btn.appendChild(span);
+    }
+  });
+}
+
+// ══════════════════════════════════════════════════
+//  GAME FLOW
+// ══════════════════════════════════════════════════
+function selectTopic(el) {
+  document.querySelectorAll('.topic-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.topic = el.dataset.topic;
+  document.getElementById('btn-play').disabled = false;
+}
+
+function startGame() {
+  let selectedPool = [];
+
+  if (state.topic === "random") {
+    // 1. Group questions by topic
+    const categories = ["primary-low", "primary-high", "secondary-low", "secondary-high"];
+    
+    // 2. Pick 1 random question from EACH grade level (4 questions)
+    categories.forEach(cat => {
+      const topicQuestions = QUESTIONS.filter(q => q.topic === cat);
+      const randomPick = topicQuestions[Math.floor(Math.random() * topicQuestions.length)];
+      selectedPool.push(randomPick);
+    });
+
+    // 3. Pick 1 extra wild-card question from remaining questions
+    const remainingQuestions = QUESTIONS.filter(q => !selectedPool.includes(q));
+    const wildcard = remainingQuestions[Math.floor(Math.random() * remainingQuestions.length)];
+    selectedPool.push(wildcard);
+
+    // 4. Shuffle the final 5 selected questions so categories are mixed
+    state.pool = shuffle([...selectedPool]);
+
+  } else {
+    // Standard mode for a single category
+    const availablePool = QUESTIONS.filter(item => item.topic === state.topic);
+    state.pool = shuffle([...availablePool]).slice(0, 5);
+  }
+
+  // Reset state & start
+  state.currentIndex = 0;
+  state.completedCount = 0;
+  state.skippedCount = 0;
+  state.score = 0;
+  state.answered = false;
+  state.hintsRemaining = 2;
+
+  document.getElementById('setup-screen').style.display = 'none';
+  document.getElementById('game-arena').style.display = 'block';
+  document.getElementById('results-screen').style.display = 'none';
+
+  renderQuestion();
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function renderQuestion() {
+  if (state.completedCount >= state.pool.length || state.currentIndex >= state.pool.length) {
+    showResults();
+    return;
+  }
+
+  const q = state.pool[state.currentIndex];
+  const meta = TOPIC_META[state.topic] || { label: "General", color: "#D87093" };
+
+  q.currentOptions = shuffle([...q.options]);
+
+  document.getElementById('topic-label').textContent = meta.label;
+  document.getElementById('question-counter').textContent = `ข้อที่: ${state.completedCount + 1} / ${state.pool.length}`;
+  document.getElementById('score-display').textContent = `${state.score} pts`;
+  document.getElementById('progress-fill').style.width = `${(state.completedCount / state.pool.length) * 100}%`;
+
+  const tag = document.getElementById('q-tag');
+  tag.innerHTML = `${meta.label.split(' ')[0]} <span>${meta.label.slice(meta.label.indexOf(' ')+1)}</span>`;
+  tag.style.color = meta.color;
+
+  // Reset Room Container & Hint logic
+  state.hintUnlockedForCurrent = false;
+  const roomContainer = document.getElementById('room-container');
+  roomContainer.style.display = 'none';
+  roomContainer.innerHTML = `
+    <div class="room-placeholder">
+      <span style="font-size:2.5rem; margin-bottom:4px;">${q.visual || '🖼️'}</span>
+      <span>รูปภาพคำใบ้ประกอบคำถาม</span>
+    </div>
+  `;
+
+  // Reset Hint Button
+  const hintBtn = document.getElementById('btn-hint');
+  hintBtn.style.display = 'none';
+  document.getElementById('hints-left').textContent = state.hintsRemaining;
+  hintBtn.disabled = state.hintsRemaining <= 0;
+
+  document.getElementById('q-text').textContent = q.q;
+
+  const grid = document.getElementById('options-grid');
+  grid.innerHTML = '';
+  const labels = ['A', 'B', 'C', 'D'];
+  q.currentOptions.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="opt-label">${labels[i]}</span><span>${opt}</span>`;
+    btn.onclick = () => selectAnswer(opt, btn);
+    grid.appendChild(btn);
+  });
+
+  const fb = document.getElementById('feedback-box');
+  fb.style.display = 'none';
+  fb.className = 'feedback-box';
+  
+  const skipBtn = document.getElementById('btn-skip');
+  skipBtn.style.display = 'inline-block';
+  skipBtn.classList.remove('visible');
+  
+  document.getElementById('btn-next').style.display = 'none';
+
+  const transBox = document.getElementById('trans-q');
+  transBox.classList.remove('visible');
+  transBox.textContent = '';
+  document.getElementById('translate-status').style.display = 'none';
+
+  state.answered = false;
+  startTimer();
+
+  if (state.lang !== 'th') translateCurrentQuestion(q, state.lang);
+}
+
+// ══════════════════════════════════════════════════
+//  TIMER & HINT FEATURE
+// ══════════════════════════════════════════════════
+function startTimer() {
+  clearInterval(state.timer);
+  state.timeLeft = 30;
+  updateTimerDisplay();
+
+  state.timer = setInterval(() => {
+    state.timeLeft--;
+    updateTimerDisplay();
+
+    if (state.timeLeft <= 20 && !state.hintUnlockedForCurrent && !state.answered) {
+      if (state.hintsRemaining > 0) {
+        document.getElementById('btn-hint').style.display = 'inline-block';
+      }
+    }
+
+    if (state.timeLeft <= 0) {
+      clearInterval(state.timer);
+      onTimeExpired();
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const el = document.getElementById('timer-display');
+  el.textContent = `⏱ ${state.timeLeft}s`;
+  el.className = state.timeLeft <= 5 ? 'timer-display urgent' : 'timer-display';
+}
+
+function useHint() {
+  if (state.hintsRemaining <= 0 || state.answered) return;
+  
+  state.hintsRemaining--;
+  state.hintUnlockedForCurrent = true;
+  
+  document.getElementById('hints-left').textContent = state.hintsRemaining;
+  document.getElementById('room-container').style.display = 'flex';
+  document.getElementById('btn-hint').style.display = 'none';
+}
+
+function onTimeExpired() {
+  if (!state.answered) {
+    document.getElementById('btn-skip').classList.add('visible');
+  }
+}
+
+// ══════════════════════════════════════════════════
+//  SKIP & ANSWER LOGIC
+// ══════════════════════════════════════════════════
+function skipQuestion() {
+  if (state.answered || state.timeLeft > 0) return;
+  clearInterval(state.timer);
+  state.skippedCount++;
+  state.currentIndex++;
+  renderQuestion();
+}
+
+function selectAnswer(selectedOptText, btn) {
+  if (state.answered) return;
+  state.answered = true;
+  clearInterval(state.timer);
+  
+  state.completedCount++;
+  const q = state.pool[state.currentIndex];
+
+  const btns = document.querySelectorAll('.option-btn');
+  btns.forEach((b, idx) => {
+    b.disabled = true;
+    if (q.currentOptions[idx] === q.answer) {
+      b.classList.add('correct');
+    }
+  });
+
+  const correct = selectedOptText === q.answer;
+  if (correct) {
+    btn.classList.add('correct');
+    const pointsEarned = (state.timeLeft * 10) + 700;
+    state.score += pointsEarned;
+    showFeedback(true, `✅ <strong>ถูกต้อง!</strong> คะแนนโบนัสความเร็ว: <strong>+${pointsEarned} pts</strong> (เหลือ ${state.timeLeft} วินาที)<br>${q.explain}`);
+  } else {
+    btn.classList.add('wrong');
+    showFeedback(false, `❌ <strong>ยังไม่ถูกต้อง!</strong> คำตอบที่ถูกต้องคือ <strong>${q.answer}</strong><br>${q.explain}`);
+  }
+
+  document.getElementById('score-display').textContent = `${state.score} pts`;
+  document.getElementById('btn-hint').style.display = 'none';
+  document.getElementById('btn-skip').style.display = 'none';
+  document.getElementById('btn-next').style.display = 'inline-block';
+}
+
+function showFeedback(correct, html) {
+  const fb = document.getElementById('feedback-box');
+  fb.style.display = 'block';
+  fb.className = `feedback-box ${correct ? 'correct-fb' : 'wrong-fb'}`;
+  fb.innerHTML = html;
+}
+
+function nextQuestion() {
+  state.currentIndex++;
+  renderQuestion();
+}
+
+// ══════════════════════════════════════════════════
+//  RESULTS
+// ══════════════════════════════════════════════════
+function showResults() {
+  clearInterval(state.timer);
+  document.getElementById('game-arena').style.display = 'none';
+  document.getElementById('results-screen').style.display = 'block';
+
+  let seal, title, msg;
+
+  if (state.completedCount === 0 && state.skippedCount > 0) {
+    seal = '🤡';
+    title = 'CHAMPION OF RUNNING AWAY';
+    msg = `"คุณกดข้ามทุกข้อเลยนะ! ลองใหม่อีกครั้งอย่างตั้งใจดูสิ"`;
+  } else if (state.score >= 4700) {
+    seal = '🏆'; title = 'LIGHTNING GENIUS';
+    msg = `"ยอดเยี่ยมมาก! คุณทำคะแนนได้อย่างรวดเร็วและแม่นยำ สมกับเป็นยอดนักวิทยาศาสตร์!"`;
+  } else if (state.score >= 3500) {
+    seal = '🥇'; title = 'SCHOLAR OF NATURE';
+    msg = `"เก่งมาก! คุณมีความรู้ทางวิทยาศาสตร์ที่ดีเยี่ยม"`;
+  } else if (state.score > 2000) {
+    seal = '🥈'; title = 'NOVICE EXPLORER';
+    msg = `"ทำได้ดี! พยายามศึกษาเพิ่มเติมอีกนิด รับรองว่าจะทำได้ดียิ่งขึ้น"`;
+  } else {
+    seal = '📜'; title = 'KEEP LEARNING!';
+    msg = `"ไม่เป็นไรนะ! ลองกลับไปทบทวนบทเรียนแล้วมาเล่นใหม่อีกรอบได้เสมอ"`;
+  }
+
+  document.getElementById('results-seal').textContent = seal;
+  document.getElementById('results-title').textContent = title;
+  document.getElementById('results-score-num').textContent = state.score;
+  document.getElementById('results-message').textContent = msg;
+}
+
+function restart() {
+  startGame();
+}
+
+function backToMenu() {
+  clearInterval(state.timer);
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('setup-screen').style.display = 'block';
+  document.getElementById('game-arena').style.display = 'none';
+}
+</script>
+</body>
+</html>
