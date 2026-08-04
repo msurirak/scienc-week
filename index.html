@@ -21,7 +21,7 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    font-family: 'Kanit', 'Lora', serif;
+    font-family: 'Kanit', 'Sarabun', 'Lora', serif;
     background: var(--parchment);
     color: var(--ink);
     min-height: 100vh;
@@ -120,9 +120,9 @@
     background: var(--ink);
     color: #FFF0F5;
     border: 2px solid var(--sepia-light);
-    font-family: 'Cinzel', serif;
+    font-family: 'Cinzel', 'Kanit', serif;
     font-size: clamp(12px, 2.5vw, 14px);
-    letter-spacing: 3px;
+    letter-spacing: 2px;
     padding: clamp(10px, 2vh, 14px) clamp(24px, 5vw, 40px);
     cursor: pointer;
     transition: all 0.2s;
@@ -328,19 +328,6 @@
   }
   .btn-lang:hover, .btn-lang.active { border-color: #FFF0F5; color: #FFF0F5; background: rgba(255,240,245,0.15); }
 
-  .trans-display {
-    margin-top: 10px;
-    padding: 8px 12px;
-    background: rgba(255,255,255,0.6);
-    border-left: 3px solid var(--indigo);
-    font-size: clamp(12px, 2.2vw, 14px);
-    color: var(--ink);
-    display: none;
-    border-radius: 0 4px 4px 0;
-  }
-  .trans-display.visible { display: block; }
-  .trans-opt { font-size: 11px; color: #7A4B5C; display: block; margin-top: 2px; }
-  .translate-status { font-size: 11px; color: var(--indigo); font-style: italic; display: none; }
   .section-divider { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
   .section-divider h2 { font-family: 'Kanit', sans-serif; font-size: clamp(12px, 2vw, 14px); letter-spacing: 1px; color: var(--ink); text-transform: uppercase; font-weight: 600; }
   .divider-line { flex: 1; height: 1px; background: var(--parchment-dark); }
@@ -354,7 +341,7 @@
     <div class="header-icon">⚗️</div>
     <div class="header-text">
       <h1>SCIENCE QUEST</h1>
-      <p>Science Week · Interactive Edition</p>
+      <p id="ui-subtitle">สัปดาห์วิทยาศาสตร์ · ฉบับอินเทอร์แอคทีฟ</p>
     </div>
   </div>
   <div class="lang-group">
@@ -371,7 +358,7 @@
   <div id="setup-screen">
     <div class="section-divider">
       <div class="divider-line"></div>
-      <h2>เลือกระดับชั้น (Select Grade Level)</h2>
+      <h2 id="ui-select-grade">เลือกระดับชั้น (Select Grade Level)</h2>
       <div class="divider-line"></div>
     </div>
 
@@ -379,30 +366,30 @@
     <div class="topic-grid">
       <div class="topic-card primary-low" data-topic="primary-low" onclick="selectTopic(this)">
         <div class="topic-icon">🌱</div>
-        <h3>ประถมต้น</h3>
-        <p>เรียนรู้เรื่องสีของพืช ผักผลไม้ และหน้าที่เบื้องต้น</p>
+        <h3 id="ui-card-pl-title">ประถมต้น</h3>
+        <p id="ui-card-pl-desc">เรียนรู้เรื่องสีของพืช ผักผลไม้ และหน้าที่เบื้องต้น</p>
       </div>
       <div class="topic-card primary-high" data-topic="primary-high" onclick="selectTopic(this)">
         <div class="topic-icon">🌿</div>
-        <h3>ประถมปลาย</h3>
-        <p>ทำความรู้จักกับสารแอนโทไซยานินและสมบัติทางกายภาพ</p>
+        <h3 id="ui-card-ph-title">ประถมปลาย</h3>
+        <p id="ui-card-ph-desc">ทำความรู้จักกับสารแอนโทไซยานินและสมบัติทางกายภาพ</p>
       </div>
       <div class="topic-card secondary-low" data-topic="secondary-low" onclick="selectTopic(this)">
         <div class="topic-icon">🧪</div>
-        <h3>มัธยมต้น</h3>
-        <p>เจาะลึกโครงสร้างเซลล์ การเปลี่ยนสีตาม pH และตัวอย่างพืช</p>
+        <h3 id="ui-card-sl-title">มัธยมต้น</h3>
+        <p id="ui-card-sl-desc">เจาะลึกโครงสร้างเซลล์ การเปลี่ยนสีตาม pH และตัวอย่างพืช</p>
       </div>
       <div class="topic-card secondary-high" data-topic="secondary-high" onclick="selectTopic(this)">
         <div class="topic-icon">🔬</div>
-        <h3>มัธยมปลาย</h3>
-        <p>กลไกทางเคมี โครงสร้างโมเลกุล และ Photoprotection</p>
+        <h3 id="ui-card-sh-title">มัธยมปลาย</h3>
+        <p id="ui-card-sh-desc">กลไกทางเคมี โครงสร้างโมเลกุล และ Photoprotection</p>
       </div>
 
       <!-- RANDOM MODE -->
       <div class="topic-card random-mode" data-topic="random" onclick="selectTopic(this)">
         <div class="topic-icon">🎲</div>
-        <h3>RANDOM MODE (สุ่มทุกระดับ)</h3>
-        <p>สุ่มคำถามจากทุกระดับชั้นเพื่อทดสอบความรู้รอบตัว!</p>
+        <h3 id="ui-card-rand-title">RANDOM MODE (สุ่มทุกระดับ)</h3>
+        <p id="ui-card-rand-desc">สุ่มคำถามจากทุกระดับชั้นเพื่อทดสอบความรู้รอบตัว!</p>
       </div>
     </div>
 
@@ -432,8 +419,6 @@
       <div class="room-container" id="room-container"></div>
 
       <div class="question-text" id="q-text">กำลังโหลดคำถาม...</div>
-      <div class="trans-display" id="trans-q"></div>
-      <div class="translate-status" id="translate-status">⏳ กำลังแปล...</div>
       <div class="options-grid" id="options-grid"></div>
       <div class="feedback-box" id="feedback-box"></div>
 
@@ -455,8 +440,8 @@
       <div class="results-score"><span id="results-score-num">0</span><span> PTS</span></div>
       <div class="results-message" id="results-message"></div>
       <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap">
-        <button class="btn-restart" onclick="restart()">↺ เล่นอีกครั้ง</button>
-        <button class="btn-restart" onclick="backToMenu()" style="background:var(--indigo); border-color:var(--indigo)">☰ หน้าหลัก</button>
+        <button class="btn-restart" id="btn-restart" onclick="restart()">↺ เล่นอีกครั้ง</button>
+        <button class="btn-restart" id="btn-mainmenu" onclick="backToMenu()" style="background:var(--indigo); border-color:var(--indigo)">☰ หน้าหลัก</button>
       </div>
     </div>
   </div>
@@ -466,38 +451,543 @@
 <script>
 // Base Raw URL for GitHub Repository Images
 const GITHUB_RAW_BASE = "https://raw.githubusercontent.com/msurirak/scienc-week/test/context%20picture%20make%20it%20real%20obivous%20tbh%20just%20put%20the%20answer%20up/";
-  
+
 // ══════════════════════════════════════════════════
-//  THAI QUESTIONS BANK (Organized by Grade Level)
+//  I18N UI TRANSLATION DICTIONARY
+// ══════════════════════════════════════════════════
+const UI_STRINGS = {
+  th: {
+    subtitle: "สัปดาห์วิทยาศาสตร์ · ฉบับอินเทอร์แอคทีฟ",
+    selectGrade: "เลือกระดับชั้น (Select Grade Level)",
+    cardPLTitle: "ประถมต้น",
+    cardPLDesc: "เรียนรู้เรื่องสีของพืช ผักผลไม้ และหน้าที่เบื้องต้น",
+    cardPHTitle: "ประถมปลาย",
+    cardPHDesc: "ทำความรู้จักกับสารแอนโทไซยานินและสมบัติทางกายภาพ",
+    cardSLTitle: "มัธยมต้น",
+    cardSLDesc: "เจาะลึกโครงสร้างเซลล์ การเปลี่ยนสีตาม pH และตัวอย่างพืช",
+    cardSHTitle: "มัธยมปลาย",
+    cardSHDesc: "กลไกทางเคมี โครงสร้างโมเลกุล และ Photoprotection",
+    cardRandTitle: "RANDOM MODE (สุ่มทุกระดับ)",
+    cardRandDesc: "สุ่มคำถามจากทุกระดับชั้นเพื่อทดสอบความรู้รอบตัว!",
+    btnPlay: "✦ เริ่มการแข่งขัน ✦",
+    qCounter: "ข้อที่: ",
+    btnHint: "💡 แสดงรูปคำใบ้",
+    btnSkip: "ข้ามคำถาม ⏭",
+    btnNext: "ข้อถัดไป →",
+    btnRestart: "↺ เล่นอีกครั้ง",
+    btnMainMenu: "☰ หน้าหลัก",
+    hintPlaceholder: "รูปภาพคำใบ้ประกอบคำถาม",
+    correctTitle: "ถูกต้อง!",
+    wrongTitle: "ยังไม่ถูกต้อง!",
+    correctAnswerIs: "คำตอบที่ถูกต้องคือ",
+    timeBonus: "คะแนนโบนัสความเร็ว",
+    topics: {
+      "primary-low": "🌱 ประถมต้น",
+      "primary-high": "🌿 ประถมปลาย",
+      "secondary-low": "🧪 มัธยมต้น",
+      "secondary-high": "🔬 มัธยมปลาย",
+      "random": "🎲 Random Mode"
+    }
+  },
+  en: {
+    subtitle: "Science Week · Interactive Edition",
+    selectGrade: "Select Grade Level",
+    cardPLTitle: "Lower Primary",
+    cardPLDesc: "Learn about plant colors, fruits & vegetables, and basic functions",
+    cardPHTitle: "Upper Primary",
+    cardPHDesc: "Get to know Anthocyanins and their physical properties",
+    cardSLTitle: "Junior High",
+    cardSLDesc: "Explore cell structure, pH color changes, and plant examples",
+    cardSHTitle: "Senior High",
+    cardSHDesc: "Chemical mechanisms, molecular structures, and Photoprotection",
+    cardRandTitle: "RANDOM MODE (All Levels)",
+    cardRandDesc: "Randomized questions from all levels to test your knowledge!",
+    btnPlay: "✦ START QUIZ ✦",
+    qCounter: "Question: ",
+    btnHint: "💡 Show Hint Image",
+    btnSkip: "Skip Question ⏭",
+    btnNext: "Next Question →",
+    btnRestart: "↺ Play Again",
+    btnMainMenu: "☰ Main Menu",
+    hintPlaceholder: "Hint image for this question",
+    correctTitle: "Correct!",
+    wrongTitle: "Incorrect!",
+    correctAnswerIs: "The correct answer is",
+    timeBonus: "Speed Bonus",
+    topics: {
+      "primary-low": "🌱 Lower Primary",
+      "primary-high": "🌿 Upper Primary",
+      "secondary-low": "🧪 Junior High",
+      "secondary-high": "🔬 Senior High",
+      "random": "🎲 Random Mode"
+    }
+  },
+  zh: {
+    subtitle: "科学周 · 互动体验版",
+    selectGrade: "选择年级 (Select Grade Level)",
+    cardPLTitle: "小学低年级",
+    cardPLDesc: "学习植物、蔬菜和水果的颜色及其基本功能",
+    cardPHTitle: "小学高年级",
+    cardPHDesc: "认识花青素及其物理性质",
+    cardSLTitle: "初中组",
+    cardSLDesc: "深入探讨细胞结构、pH值变色及植物实例",
+    cardSHTitle: "高中组",
+    cardSHDesc: "化学机制、分子结构与光保护作用",
+    cardRandTitle: "随机模式 (所有级别)",
+    cardRandDesc: "随机抽取所有级别的题目，测试你的综合科学知识！",
+    btnPlay: "✦ 开始比赛 ✦",
+    qCounter: "题目: ",
+    btnHint: "💡 显示提示图片",
+    btnSkip: "跳过题目 ⏭",
+    btnNext: "下一题 →",
+    btnRestart: "↺ 再玩一次",
+    btnMainMenu: "☰ 主菜单",
+    hintPlaceholder: "本题提示图片",
+    correctTitle: "回答正确！",
+    wrongTitle: "回答错误！",
+    correctAnswerIs: "正确答案是",
+    timeBonus: "速度加分",
+    topics: {
+      "primary-low": "🌱 小学低年级",
+      "primary-high": "🌿 小学高年级",
+      "secondary-low": "🧪 初中组",
+      "secondary-high": "🔬 高中组",
+      "random": "🎲 随机模式"
+    }
+  }
+};
+
+// ══════════════════════════════════════════════════
+//  QUESTIONS BANK WITH CUSTOM EN/ZH TRANSLATIONS
 // ══════════════════════════════════════════════════
 const QUESTIONS = [
-  // --- ประถมต้น (5 Questions) ---
-  { id: 1, topic: "primary-low", visual: "🥬", imageUrl: GITHUB_RAW_BASE + "1.png", q: "สารสีเขียวในใบไม้ เช่น ใบผักบุ้ง หรือ บรอกโคลี ทำหน้าที่เปรียบเหมือนอะไรของพืช?", options: ["เป็นร่มกันแดด", "เป็นห้องครัวทำอาหาร", "เป็นป้ายไฟเรียกดึงดูดแมลง", "เป็นเกราะป้องกันเชื้อโรค"], answer: "เป็นห้องครัวทำอาหาร", explain: "สีเขียวในพืชทำหน้าที่สร้างอาหารจากแสงแดด เปรียบเหมือน 'ห้องครัว' ของต้นไม้" },
-  { id: 2, topic: "primary-low", visual: "🌸", imageUrl: GITHUB_RAW_BASE + "2.png", q: "ดอกไม้สีสดใส เช่น ดอกอัญชันสีน้ำเงิน หรือดอกไม้สีแดง มีสีสันสวยงามไว้เพื่อประโยชน์อะไรเป็นหลัก?", options: ["ดึงดูดผีเสื้อและแมลงให้มาช่วยผสมเกสร", "ทำให้ต้นไม้หนักขึ้น", "ช่วยให้ต้นไม้คายน้ำได้เร็วขึ้น", "ช่วยบังแสงแดดให้รากพืช"], answer: "ดึงดูดผีเสื้อและแมลงให้มาช่วยผสมเกสร", explain: "สีสันที่สดใสของดอกไม้ช่วยเรียกแมลง เช่น ผึ้งและผีเสื้อ ให้บินมาดมกลิ่นและช่วยตักเกสรไปผสมพันธุ์" },
-  { id: 3, topic: "primary-low", visual: "🥕", imageUrl: GITHUB_RAW_BASE + "3.png", q: "ถ้าเด็กๆ อยากตาไบรท์ บำรุงสายตาให้มองเห็นชัดเจน ควรเลือกกินผักผลไม้กลุ่มสีใด?", options: ["สีเขียว เช่น ผักบุ้ง", "สีส้ม-สีเหลือง เช่น แครอท และ ฟักทอง", "สีขาว เช่น หัวไชเท้า", "สีน้ำตาล เช่น เห็ด"], answer: "สีส้ม-สีเหลือง เช่น แครอท และ ฟักทอง", explain: "ผักผลไม้สีส้มและเหลืองมีสารอาหารที่ช่วยบำรุงสายตา ทำให้มองเห็นชัดเจน" },
-  { id: 4, topic: "primary-low", visual: "🍇", imageUrl: GITHUB_RAW_BASE + "4.png", q: "ผักผลไม้กลุ่มสีแดง-ม่วง เช่น สตรอว์เบอร์รี มะเขือยาวสีม่วง หรือ องุ่น มีประโยชน์ต่อร่างกายอย่างไร?", options: ["ช่วยบำรุงหัวใจ และทำให้ร่างกายแข็งแรงไม่ป่วยง่าย", "ทำให้ฟันหลุดง่าย", "ทำให้ง่วงนอนตลอดเวลา", "ทำให้วิ่งเร็วขึ้นทันที"], answer: "ช่วยบำรุงหัวใจ และทำให้ร่างกายแข็งแรงไม่ป่วยง่าย", explain: "ผักผลไม้สีแดงและม่วงเปรียบเหมือน 'เกราะป้องกัน' ที่ช่วยให้หัวใจแข็งแรงและสร้างภูมิคุ้มกันโรค" },
-  { id: 5, topic: "primary-low", visual: "🎃", imageUrl: GITHUB_RAW_BASE + "5.png", q: "ข้อใดคือ 'ผักและผลไม้กลุ่มสีส้ม-สีเหลือง' ทั้งหมด?", options: ["กะหล่ำปลีสีม่วง และ ดอกอัญชัน", "บรอกโคลี และ ผักบุ้ง", "ฟักทอง และ มะละกอสุก", "หัวไชเท้า และ กระเทียม"], answer: "ฟักทอง และ มะละกอสุก", explain: "ทั้งฟักทองและมะละกอสุกมีเนื้อสีส้ม-เหลืองชัดเจน อยู่ในกลุ่มสารอาหารบำรุงสายตา" },
+  // --- Primary Low (5 Questions) ---
+  {
+    id: 1, topic: "primary-low", visual: "🥬", imageUrl: GITHUB_RAW_BASE + "1.png",
+    th: {
+      q: "สารสีเขียวในใบไม้ เช่น ใบผักบุ้ง หรือ บรอกโคลี ทำหน้าที่เปรียบเหมือนอะไรของพืช?",
+      options: ["เป็นร่มกันแดด", "เป็นห้องครัวทำอาหาร", "เป็นป้ายไฟเรียกดึงดูดแมลง", "เป็นเกราะป้องกันเชื้อโรค"],
+      answer: 1,
+      explain: "สีเขียวในพืชทำหน้าที่สร้างอาหารจากแสงแดด เปรียบเหมือน 'ห้องครัว' ของต้นไม้"
+    },
+    en: {
+      q: "What is the function of green pigment in plant leaves (like morning glory or broccoli) analogous to?",
+      options: ["A sunshade umbrella", "A kitchen for cooking food", "A neon sign attracting insects", "A protective shield against germs"],
+      answer: 1,
+      explain: "The green pigment in plants uses sunlight to make food, acting like the plant's 'kitchen'."
+    },
+    zh: {
+      q: "植物叶片中的绿色物质（如空心菜或西兰花）在植物中起什么作用？",
+      options: ["防晒遮阳伞", "做饭的厨房", "吸引昆虫的灯光招牌", "防御病菌的盾牌"],
+      answer: 1,
+      explain: "植物中的绿色色素利用阳光制造食物，就像植物的“厨房”。"
+    }
+  },
+  {
+    id: 2, topic: "primary-low", visual: "🌸", imageUrl: GITHUB_RAW_BASE + "2.png",
+    th: {
+      q: "ดอกไม้สีสดใส เช่น ดอกอัญชันสีน้ำเงิน หรือดอกไม้สีแดง มีสีสันสวยงามไว้เพื่อประโยชน์อะไรเป็นหลัก?",
+      options: ["ดึงดูดผีเสื้อและแมลงให้มาช่วยผสมเกสร", "ทำให้ต้นไม้หนักขึ้น", "ช่วยให้ต้นไม้คายน้ำได้เร็วขึ้น", "ช่วยบังแสงแดดให้รากพืช"],
+      answer: 0,
+      explain: "สีสันที่สดใสของดอกไม้ช่วยเรียกแมลง เช่น ผึ้งและผีเสื้อ ให้บินมาดมกลิ่นและช่วยตักเกสรไปผสมพันธุ์"
+    },
+    en: {
+      q: "What is the primary purpose of brightly colored flowers, such as blue butterfly pea or red blossoms?",
+      options: ["Attracting butterflies and insects for pollination", "Making the plant heavier", "Helping the plant transpire water faster", "Shading plant roots from sunlight"],
+      answer: 0,
+      explain: "Bright flower colors attract insects like bees and butterflies to help carry pollen for reproduction."
+    },
+    zh: {
+      q: "鲜艳的花朵（如蓝色蝶豆花或红花）色彩斑斓的主要目的是什么？",
+      options: ["吸引蝴蝶和昆虫帮忙传粉", "使植物变重", "帮助植物更快蒸腾水分", "为植物根部遮挡阳光"],
+      answer: 0,
+      explain: "鲜艳的花色能吸引蜜蜂和蝴蝶等昆虫前来并帮助传播花粉。"
+    }
+  },
+  {
+    id: 3, topic: "primary-low", visual: "🥕", imageUrl: GITHUB_RAW_BASE + "3.png",
+    th: {
+      q: "ถ้าเด็กๆ อยากตาไบรท์ บำรุงสายตาให้มองเห็นชัดเจน ควรเลือกกินผักผลไม้กลุ่มสีใด?",
+      options: ["สีเขียว เช่น ผักบุ้ง", "สีส้ม-สีเหลือง เช่น แครอท และ ฟักทอง", "สีขาว เช่น หัวไชเท้า", "สีน้ำตาล เช่น เห็ด"],
+      answer: 1,
+      explain: "ผักผลไม้สีส้มและเหลืองมีสารอาหารที่ช่วยบำรุงสายตา ทำให้มองเห็นชัดเจน"
+    },
+    en: {
+      q: "To support healthy vision and bright eyes, which color group of fruits and vegetables should you choose?",
+      options: ["Green (e.g. Morning glory)", "Orange-Yellow (e.g. Carrots & Pumpkins)", "White (e.g. Radishes)", "Brown (e.g. Mushrooms)"],
+      answer: 1,
+      explain: "Orange and yellow fruits and vegetables contain nutrients that help maintain healthy eyesight."
+    },
+    zh: {
+      q: "如果想保护视力、让眼睛明亮，应该选择哪种颜色的蔬菜水果？",
+      options: ["绿色（如空心菜）", "橙黄色（如胡萝卜和南瓜）", "白色（如白萝卜）", "棕色（如蘑菇）"],
+      answer: 1,
+      explain: "橙黄色蔬果富含对眼睛有益的营养成分，有助于维持清晰视力。"
+    }
+  },
+  {
+    id: 4, topic: "primary-low", visual: "🍇", imageUrl: GITHUB_RAW_BASE + "4.png",
+    th: {
+      q: "ผักผลไม้กลุ่มสีแดง-ม่วง เช่น สตรอว์เบอร์รี มะเขือยาวสีม่วง หรือ องุ่น มีประโยชน์ต่อร่างกายอย่างไร?",
+      options: ["ช่วยบำรุงหัวใจ และทำให้ร่างกายแข็งแรงไม่ป่วยง่าย", "ทำให้ฟันหลุดง่าย", "ทำให้ง่วงนอนตลอดเวลา", "ทำให้วิ่งเร็วขึ้นทันที"],
+      answer: 0,
+      explain: "ผักผลไม้สีแดงและม่วงเปรียบเหมือน 'เกราะป้องกัน' ที่ช่วยให้หัวใจแข็งแรงและสร้างภูมิคุ้มกันโรค"
+    },
+    en: {
+      q: "How do red and purple fruits and vegetables (like strawberries, purple eggplants, or grapes) benefit our body?",
+      options: ["Nourish the heart and boost immunity", "Cause teeth to fall out easily", "Make you drowsy all day", "Instantly make you run faster"],
+      answer: 0,
+      explain: "Red and purple produce acts like a protective shield, strengthening the heart and building immunity."
+    },
+    zh: {
+      q: "红紫色的蔬果（如草莓、紫茄子或葡萄）对人体有什么好处？",
+      options: ["保护心脏，增强免疫力不易生病", "使牙齿容易脱落", "让人时刻昏昏欲睡", "让人立刻跑得更快"],
+      answer: 0,
+      explain: "红紫色蔬果就像“防护盾”，有助于保护心脏健康并增强免疫力。"
+    }
+  },
+  {
+    id: 5, topic: "primary-low", visual: "🎃", imageUrl: GITHUB_RAW_BASE + "5.png",
+    th: {
+      q: "ข้อใดคือ 'ผักและผลไม้กลุ่มสีส้ม-สีเหลือง' ทั้งหมด?",
+      options: ["กะหล่ำปลีสีม่วง และ ดอกอัญชัน", "บรอกโคลี และ ผักบุ้ง", "ฟักทอง และ มะละกอสุก", "หัวไชเท้า และ กระเทียม"],
+      answer: 2,
+      explain: "ทั้งฟักทองและมะละกอสุกมีเนื้อสีส้ม-เหลืองชัดเจน อยู่ในกลุ่มสารอาหารบำรุงสายตา"
+    },
+    en: {
+      q: "Which option consists ENTIRELY of 'orange-yellow fruits and vegetables'?",
+      options: ["Purple cabbage and Butterfly pea", "Broccoli and Morning glory", "Pumpkin and Ripe papaya", "Radish and Garlic"],
+      answer: 2,
+      explain: "Both pumpkin and ripe papaya have distinct orange-yellow flesh, rich in eye-nourishing nutrients."
+    },
+    zh: {
+      q: "下列哪一组完全属于“橙黄色蔬菜和水果”？",
+      options: ["紫甘蓝和蝶豆花", "西兰花和空心菜", "南瓜和熟木瓜", "白萝卜和大蒜"],
+      answer: 2,
+      explain: "南瓜和熟木瓜都有明显的橙黄色果肉，属于护眼营养蔬果。"
+    }
+  },
 
-  // --- ประถมปลาย (5 Questions) ---
-  { id: 6, topic: "primary-high", visual: "🟣", imageUrl: GITHUB_RAW_BASE + "6.png", q: "สารแอนโทไซยานิน (Anthocyanin) ทำให้พืชมีสีอะไรบ้าง?", options: ["สีเขียวและสีเหลือง", "สีแดง สีม่วง และสีน้ำเงิน", "สีส้มและสีขาว", "ไม่มีสี"], answer: "สีแดง สีม่วง และสีน้ำเงิน", explain: "แอนโทไซยานินเป็นรงควัตถุหรือสารสีที่ทำให้พืชมีสีโทนเข้ม เช่น แดง ม่วง และน้ำเงิน ส่วนสีเขียวเกิดจากคลอโรฟิลล์" },
-  { id: 7, topic: "primary-high", visual: "🌺", imageUrl: GITHUB_RAW_BASE + "7.png", q: "เราสามารถพบสารแอนโทไซยานินมากที่สุดในส่วนใดของพืช?", options: ["รากแก้วใต้ดิน", "ดอกและผลไม้", "ท่อน้ำและท่ออาหาร", "แก่นลำต้น"], answer: "ดอกและผลไม้", explain: "สารนี้มักสะสมอยู่ในส่วนที่ต้องการดึงดูดแมลงหรือสัตว์ เช่น กลีบดอกไม้ และเปลือกหรือเนื้อของผลไม้" },
-  { id: 8, topic: "primary-high", visual: "💧", imageUrl: GITHUB_RAW_BASE + "8.png", q: "สมบัติทางกายภาพที่สำคัญของสารแอนโทไซยานินคือข้อใด?", options: ["ไม่ละลายน้ำและไม่ละลายในแอลกอฮอล์", "ละลายในน้ำได้ดี", "ระเหยกลายเป็นไอได้ง่ายเมื่อโดนแดด", "เปลี่ยนเป็นก๊าซออกซิเจน"], answer: "ละลายในน้ำได้ดี", explain: "แอนโทไซยานินมีสมบัติละลายน้ำได้ดี สังเกตได้จากตอนต้มดอกอัญชันหรือกะหล่ำปลีม่วง น้ำจะเปลี่ยนสีทันที" },
-  { id: 9, topic: "primary-high", visual: "🍆", imageUrl: GITHUB_RAW_BASE + "9.png", q: "พืชในข้อใดมีส่วนประกอบของสารแอนโทไซยานินที่เด่นชัด?", options: ["คะน้าและผักกาดขาว", "ดอกอัญชันและกะหล่ำปลีม่วง", "มันเทศสีเหลืองและข้าวโพดหวาน", "แตงกวาและมะนาว"], answer: "ดอกอัญชันและกะหล่ำปลีม่วง", explain: "พืชทั้งสองชนิดนี้มีสีม่วงและน้ำเงินที่เข้มมาก ซึ่งเป็นเอกลักษณ์ของสารแอนโทไซยานิน" },
-  { id: 10, topic: "primary-high", visual: "🛡️", imageUrl: GITHUB_RAW_BASE + "10.png", q: "ประโยชน์หลักของสารแอนโทไซยานินต่อร่างกายมนุษย์คืออะไร?", options: ["ช่วยเพิ่มความสูงของกระดูก", "เป็นสารต้านอนุมูลอิสระ ช่วยบำรุงสุขภาพ", "ทำให้ฟันแข็งแรงขึ้น", "เพิ่มไขมันดีในเส้นเลือดทันที"], answer: "เป็นสารต้านอนุมูลอิสระ ช่วยบำรุงสุขภาพ", explain: "แอนโทไซยานินช่วยปกป้องเซลล์ในร่างกาย ลดความเสี่ยงของโรค และช่วยบำรุงสายตา" },
+  // --- Primary High (5 Questions) ---
+  {
+    id: 6, topic: "primary-high", visual: "🟣", imageUrl: GITHUB_RAW_BASE + "6.png",
+    th: {
+      q: "สารแอนโทไซยานิน (Anthocyanin) ทำให้พืชมีสีอะไรบ้าง?",
+      options: ["สีเขียวและสีเหลือง", "สีแดง สีม่วง และสีน้ำเงิน", "สีส้มและสีขาว", "ไม่มีสี"],
+      answer: 1,
+      explain: "แอนโทไซยานินเป็นรงควัตถุหรือสารสีที่ทำให้พืชมีสีโทนเข้ม เช่น แดง ม่วง และน้ำเงิน ส่วนสีเขียวเกิดจากคลอโรฟิลล์"
+    },
+    en: {
+      q: "What colors does the pigment Anthocyanin give to plants?",
+      options: ["Green and Yellow", "Red, Purple, and Blue", "Orange and White", "Colorless"],
+      answer: 1,
+      explain: "Anthocyanin is a pigment responsible for deep shades like red, purple, and blue, while green comes from chlorophyll."
+    },
+    zh: {
+      q: "花青素（Anthocyanin）赋予植物哪些颜色？",
+      options: ["绿色和黄色", "红色、紫色和蓝色", "橙色和白色", "无色"],
+      answer: 1,
+      explain: "花青素是使植物呈现红、紫、蓝等深色的色素，而绿色是由叶绿素引起的。"
+    }
+  },
+  {
+    id: 7, topic: "primary-high", visual: "🌺", imageUrl: GITHUB_RAW_BASE + "7.png",
+    th: {
+      q: "เราสามารถพบสารแอนโทไซยานินมากที่สุดในส่วนใดของพืช?",
+      options: ["รากแก้วใต้ดิน", "ดอกและผลไม้", "ท่อน้ำและท่ออาหาร", "แก่นลำต้น"],
+      answer: 1,
+      explain: "สารนี้มักสะสมอยู่ในส่วนที่ต้องการดึงดูดแมลงหรือสัตว์ เช่น กลีบดอกไม้ และเปลือกหรือเนื้อของผลไม้"
+    },
+    en: {
+      q: "In which part of the plant is Anthocyanin most abundantly found?",
+      options: ["Underground taproot", "Flowers and Fruits", "Xylem and Phloem", "Stem core"],
+      answer: 1,
+      explain: "Anthocyanins accumulate primarily in plant parts that attract pollinators, like petals and fruit skins."
+    },
+    zh: {
+      q: "在植物的哪个部位最容易找到花青素？",
+      options: ["地下主根", "花朵和果实", "输导组织（木质部/韧皮部）", "茎心"],
+      answer: 1,
+      explain: "花青素主要积累在需要吸引昆虫或动物的部位，如花瓣和果实皮肉。"
+    }
+  },
+  {
+    id: 8, topic: "primary-high", visual: "💧", imageUrl: GITHUB_RAW_BASE + "8.png",
+    th: {
+      q: "สมบัติทางกายภาพที่สำคัญของสารแอนโทไซยานินคือข้อใด?",
+      options: ["ไม่ละลายน้ำและไม่ละลายในแอลกอฮอล์", "ละลายในน้ำได้ดี", "ระเหยกลายเป็นไอได้ง่ายเมื่อโดนแดด", "เปลี่ยนเป็นก๊าซออกซิเจน"],
+      answer: 1,
+      explain: "แอนโทไซยานินมีสมบัติละลายน้ำได้ดี สังเกตได้จากตอนต้มดอกอัญชันหรือกะหล่ำปลีม่วง น้ำจะเปลี่ยนสีทันที"
+    },
+    en: {
+      q: "What is an important physical property of Anthocyanins?",
+      options: ["Insoluble in water and alcohol", "Highly soluble in water", "Evaporates easily under sunlight", "Turns into oxygen gas"],
+      answer: 1,
+      explain: "Anthocyanins are water-soluble, as seen when boiling butterfly pea or purple cabbage and the water turns blue/purple."
+    },
+    zh: {
+      q: "花青素的重要物理性质是什么？",
+      options: ["不溶于水和酒精", "易溶于水", "晒太阳易蒸发", "转化为氧气"],
+      answer: 1,
+      explain: "花青素具有良好的水溶性，例如煮蝶豆花或紫甘蓝时，水会迅速变色。"
+    }
+  },
+  {
+    id: 9, topic: "primary-high", visual: "🍆", imageUrl: GITHUB_RAW_BASE + "9.png",
+    th: {
+      q: "พืชในข้อใดมีส่วนประกอบของสารแอนโทไซยานินที่เด่นชัด?",
+      options: ["คะน้าและผักกาดขาว", "ดอกอัญชันและกะหล่ำปลีม่วง", "มันเทศสีเหลืองและข้าวโพดหวาน", "แตงกวาและมะนาว"],
+      answer: 1,
+      explain: "พืชทั้งสองชนิดนี้มีสีม่วงและน้ำเงินที่เข้มมาก ซึ่งเป็นเอกลักษณ์ของสารแอนโทไซยานิน"
+    },
+    en: {
+      q: "Which of the following plant pairs prominently contains Anthocyanins?",
+      options: ["Kale and Chinese cabbage", "Butterfly pea and Purple cabbage", "Yellow sweet potato and Sweetcorn", "Cucumber and Lemon"],
+      answer: 1,
+      explain: "Both butterfly pea and purple cabbage have intense purple and blue colors, characteristic of anthocyanins."
+    },
+    zh: {
+      q: "下列哪些植物含有显著的花青素成分？",
+      options: ["羽衣甘蓝和大白菜", "蝶豆花和紫甘蓝", "黄心番薯和甜玉米", "黄瓜和柠檬"],
+      answer: 1,
+      explain: "这两种植物具有深浓的紫蓝色，这是花青素的典型特征。"
+    }
+  },
+  {
+    id: 10, topic: "primary-high", visual: "🛡️", imageUrl: GITHUB_RAW_BASE + "10.png",
+    th: {
+      q: "ประโยชน์หลักของสารแอนโทไซยานินต่อร่างกายมนุษย์คืออะไร?",
+      options: ["ช่วยเพิ่มความสูงของกระดูก", "เป็นสารต้านอนุมูลอิสระ ช่วยบำรุงสุขภาพ", "ทำให้ฟันแข็งแรงขึ้น", "เพิ่มไขมันดีในเส้นเลือดทันที"],
+      answer: 1,
+      explain: "แอนโทไซยานินช่วยปกป้องเซลล์ในร่างกาย ลดความเสี่ยงของโรค และช่วยบำรุงสายตา"
+    },
+    en: {
+      q: "What is the primary health benefit of Anthocyanins for the human body?",
+      options: ["Promotes rapid bone growth", "Acts as an antioxidant supporting health", "Strengthens dental enamel", "Instantly increases good cholesterol"],
+      answer: 1,
+      explain: "Anthocyanins protect body cells from damage, reduce disease risks, and support eye health."
+    },
+    zh: {
+      q: "花青素对人体的主要健康功效是什么？",
+      options: ["促进骨骼迅速长高", "作为抗氧化剂，促进人体健康", "使牙齿更坚固", "立即使血液中的好胆固醇增加"],
+      answer: 1,
+      explain: "花青素有助于保护细胞，降低患病风险，并能改善眼睛健康。"
+    }
+  },
 
-  // --- มัธยมต้น (5 Questions) ---
-  { id: 11, topic: "secondary-low", visual: "🔬", imageUrl: GITHUB_RAW_BASE + "11.png", q: "สารแอนโทไซยานิน (Anthocyanin) เป็นสารสีที่ละลายน้ำได้ มักถูกเก็บสะสมไว้ในออร์แกเนลล์ใดของเซลล์พืช?", options: ["คลอโรพลาสต์ (Chloroplast)", "ไมโทคอนเดรีย (Mitochondria)", "แวคิวโอล (Vacuole)", "รีโบโซม (Ribosome)"], answer: "แวคิวโอล (Vacuole)", explain: "แวคิวโอลทำหน้าที่เก็บสะสมน้ำและสารละลายต่างๆ ในเซลล์พืช รวมถึงสารสีที่ละลายน้ำได้อย่างแอนโทไซยานิน" },
-  { id: 12, topic: "secondary-low", visual: "🧪", imageUrl: GITHUB_RAW_BASE + "12.png", q: "ถ้านำน้ำกะหล่ำปลีสีม่วง (ซึ่งมีสารแอนโทไซยานิน) ไปหยดใส่ในสารละลายชนิดหนึ่ง แล้วพบว่าเปลี่ยนเป็นสีเขียว-เหลือง แสดงว่าสารละลายนั้นมีสมบัติอย่างไร?", options: ["เป็นกรด", "เป็นเบส (ด่าง)", "เป็นกลาง", "เป็นสารละลายอิ่มตัว"], answer: "เป็นเบส (ด่าง)", explain: "แอนโทไซยานินเมื่อเจอสารที่มีฤทธิ์เป็นเบส (pH > 7) เช่น น้ำสบู่ หรือ ผงซักฟอก จะเปลี่ยนสีเป็นโทนเขียวหรือเหลือง" },
-  { id: 13, topic: "secondary-low", visual: "☀️", imageUrl: GITHUB_RAW_BASE + "13.png", q: "ข้อใดไม่ใช่หน้าที่หรือประโยชน์ของสารแอนโทไซยานินที่มีต่อพืชในธรรมชาติ?", options: ["ช่วยดึงดูดแมลงให้มาช่วยผสมเกสร", "ช่วยกรองรังสี UV ที่เป็นอันตรายต่อเซลล์พืช", "ช่วยดูดกลืนพลังงานแสงเพื่อใช้ในกระบวนการสังเคราะห์ด้วยแสงเป็นหลัก", "ช่วยปกป้องพืชจากสภาวะความเครียดในสิ่งแวดล้อม เช่น ความเย็น"], answer: "ช่วยดูดกลืนพลังงานแสงเพื่อใช้ในกระบวนการสังเคราะห์ด้วยแสงเป็นหลัก", explain: "สารหลักที่ใช้ในการสังเคราะห์ด้วยแสงคือ คลอโรฟิลล์ (Chlorophyll) สีเขียว ไม่ใช่แอนโทไซยานิน" },
-  { id: 14, topic: "secondary-low", visual: "🍋", imageUrl: GITHUB_RAW_BASE + "14.png", q: "เมื่อเราบีบน้ำมะนาวลงในน้ำดอกอัญชัน สีของน้ำอัญชันจะเปลี่ยนจากสีน้ำเงินเป็นสีม่วง เหตุการณ์นี้เกิดขึ้นเพราะเหตุใด?", options: ["น้ำมะนาวเข้าไปทำลายสารแอนโทไซยานินจนตกตะกอน", "กรดในน้ำมะนาวทำให้ค่า pH เปลี่ยน สารแอนโทไซยานินจึงเปลี่ยนสี", "ความร้อนจากการบีบน้ำมะนาวทำให้สารสีสลายตัว", "น้ำมะนาวเข้าไปเจือจางความเข้มข้นของน้ำอัญชัน"], answer: "กรดในน้ำมะนาวทำให้ค่า pH เปลี่ยน สารแอนโทไซยานินจึงเปลี่ยนสี", explain: "น้ำมะนาวมีกรดซิตริก (pH ต่ำ) ซึ่งแอนโทไซยานินมีคุณสมบัติเป็นอินดิเคเตอร์ธรรมชาติ จึงเปลี่ยนสีตามค่า pH ที่ลดลง" },
-  { id: 15, topic: "secondary-low", visual: "🍚", imageUrl: GITHUB_RAW_BASE + "15.png", q: "อาหารในข้อใดที่มีปริมาณสารแอนโทไซยานินสะสมอยู่สูงที่สุด?", options: ["ข้าวโพดเหลือง และ ฟักทอง", "ผักกาดขาว และ มะละกอสุก", "ข้าวไรซ์เบอร์รี และ มะเขือยาวสีม่วง", "แครอท และ ส้ม"], answer: "ข้าวไรซ์เบอร์รี และ มะเขือยาวสีม่วง", explain: "แอนโทไซยานินเป็นสารสีที่ให้โทนสีแดง ม่วง และน้ำเงิน จึงพบมากในพืชที่มีสีเข้มกลุ่มนี้" },
+  // --- Secondary Low (5 Questions) ---
+  {
+    id: 11, topic: "secondary-low", visual: "🔬", imageUrl: GITHUB_RAW_BASE + "11.png",
+    th: {
+      q: "สารแอนโทไซยานิน (Anthocyanin) เป็นสารสีที่ละลายน้ำได้ มักถูกเก็บสะสมไว้ในออร์แกเนลล์ใดของเซลล์พืช?",
+      options: ["คลอโรพลาสต์ (Chloroplast)", "ไมโทคอนเดรีย (Mitochondria)", "แวคิวโอล (Vacuole)", "รีโบโซม (Ribosome)"],
+      answer: 2,
+      explain: "แวคิวโอลทำหน้าที่เก็บสะสมน้ำและสารละลายต่างๆ ในเซลล์พืช รวมถึงสารสีที่ละลายน้ำได้อย่างแอนโทไซยานิน"
+    },
+    en: {
+      q: "Anthocyanin is a water-soluble pigment. In which plant cell organelle is it primarily stored?",
+      options: ["Chloroplast", "Mitochondria", "Vacuole", "Ribosome"],
+      answer: 2,
+      explain: "The vacuole stores water and dissolved substances in plant cells, including water-soluble pigments like anthocyanin."
+    },
+    zh: {
+      q: "花青素是一种水溶性色素，它主要储存在植物细胞的哪个细胞器中？",
+      options: ["叶绿体", "线粒体", "液泡", "核糖体"],
+      answer: 2,
+      explain: "液泡负责储存植物细胞中的水分和溶解物质，包括花青素等水溶性色素。"
+    }
+  },
+  {
+    id: 12, topic: "secondary-low", visual: "🧪", imageUrl: GITHUB_RAW_BASE + "12.png",
+    th: {
+      q: "ถ้านำน้ำกะหล่ำปลีสีม่วง (ซึ่งมีสารแอนโทไซยานิน) ไปหยดใส่ในสารละลายชนิดหนึ่ง แล้วพบว่าเปลี่ยนเป็นสีเขียว-เหลือง แสดงว่าสารละลายนั้นมีสมบัติอย่างไร?",
+      options: ["เป็นกรด", "เป็นเบส (ด่าง)", "เป็นกลาง", "เป็นสารละลายอิ่มตัว"],
+      answer: 1,
+      explain: "แอนโทไซยานินเมื่อเจอสารที่มีฤทธิ์เป็นเบส (pH > 7) เช่น น้ำสบู่ หรือ ผงซักฟอก จะเปลี่ยนสีเป็นโทนเขียวหรือเหลือง"
+    },
+    en: {
+      q: "If purple cabbage juice (containing anthocyanin) turns green-yellow when added to a solution, what property does the solution have?",
+      options: ["Acidic", "Basic (Alkaline)", "Neutral", "Saturated"],
+      answer: 1,
+      explain: "Anthocyanin turns green or yellow when exposed to alkaline substances (pH > 7), such as soapy water or detergent."
+    },
+    zh: {
+      q: "如果将含有花青素的紫甘蓝汁滴入某种溶液中，颜色变为黄绿色，说明该溶液具有什么性质？",
+      options: ["酸性", "碱性", "中性", "饱和溶液"],
+      answer: 1,
+      explain: "当花青素遇到碱性物质（pH > 7，如肥皂水或洗涤剂）时，会变成绿色或黄色。"
+    }
+  },
+  {
+    id: 13, topic: "secondary-low", visual: "☀️", imageUrl: GITHUB_RAW_BASE + "13.png",
+    th: {
+      q: "ข้อใดไม่ใช่หน้าที่หรือประโยชน์ของสารแอนโทไซยานินที่มีต่อพืชในธรรมชาติ?",
+      options: ["ช่วยดึงดูดแมลงให้มาช่วยผสมเกสร", "ช่วยกรองรังสี UV ที่เป็นอันตรายต่อเซลล์พืช", "ช่วยดูดกลืนพลังงานแสงเพื่อใช้ในกระบวนการสังเคราะห์ด้วยแสงเป็นหลัก", "ช่วยปกป้องพืชจากสภาวะความเครียดในสิ่งแวดล้อม เช่น ความเย็น"],
+      answer: 2,
+      explain: "สารหลักที่ใช้ในการสังเคราะห์ด้วยแสงคือ คลอโรฟิลล์ (Chlorophyll) สีเขียว ไม่ใช่แอนโทไซยานิน"
+    },
+    en: {
+      q: "Which of the following is NOT a function or benefit of Anthocyanins for plants in nature?",
+      options: ["Attracting insects for pollination", "Filtering harmful UV radiation", "Primary light absorption for photosynthesis", "Protecting plants from environmental stress (e.g. cold)"],
+      answer: 2,
+      explain: "The main pigment responsible for driving photosynthesis is green Chlorophyll, not Anthocyanin."
+    },
+    zh: {
+      q: "下列哪项不是自然界中花青素对植物的作用或好处？",
+      options: ["吸引昆虫传粉", "过滤有害的紫外线", "作为光合作用的主要光能吸收色素", "保护植物免受冷害等环境胁迫"],
+      answer: 2,
+      explain: "光合作用的主要色素是绿色的叶绿素，而不是花青素。"
+    }
+  },
+  {
+    id: 14, topic: "secondary-low", visual: "🍋", imageUrl: GITHUB_RAW_BASE + "14.png",
+    th: {
+      q: "เมื่อเราบีบน้ำมะนาวลงในน้ำดอกอัญชัน สีของน้ำอัญชันจะเปลี่ยนจากสีน้ำเงินเป็นสีม่วง เหตุการณ์นี้เกิดขึ้นเพราะเหตุใด?",
+      options: ["น้ำมะนาวเข้าไปทำลายสารแอนโทไซยานินจนตกตะกอน", "กรดในน้ำมะนาวทำให้ค่า pH เปลี่ยน สารแอนโทไซยานินจึงเปลี่ยนสี", "ความร้อนจากการบีบน้ำมะนาวทำให้สารสีสลายตัว", "น้ำมะนาวเข้าไปเจือจางความเข้มข้นของน้ำอัญชัน"],
+      answer: 1,
+      explain: "น้ำมะนาวมีกรดซิตริก (pH ต่ำ) ซึ่งแอนโทไซยานินมีคุณสมบัติเป็นอินดิเคเตอร์ธรรมชาติ จึงเปลี่ยนสีตามค่า pH ที่ลดลง"
+    },
+    en: {
+      q: "Squeezing lemon juice into butterfly pea tea changes its color from blue to purple. Why does this happen?",
+      options: ["Lemon juice destroys anthocyanins causing precipitation", "Acid in lemon juice changes the pH, altering anthocyanin color", "Friction heat from squeezing decomposes pigments", "Lemon juice dilutes the concentration of the tea"],
+      answer: 1,
+      explain: "Lemon juice contains citric acid (low pH). Anthocyanin acts as a natural pH indicator, changing color as pH drops."
+    },
+    zh: {
+      q: "当把柠檬汁挤入蝶豆花茶中时，颜色会从蓝色变成紫色。这是为什么？",
+      options: ["柠檬汁破坏了花青素导致沉淀", "柠檬汁中的酸改变了pH值，从而使花青素变色", "挤压产生的热量分解了色素", "柠檬汁稀释了蝶豆花茶的浓度"],
+      answer: 1,
+      explain: "柠檬汁含有柠檬酸（低pH值）。花青素作为天然酸碱指示剂，随pH值下降而变色。"
+    }
+  },
+  {
+    id: 15, topic: "secondary-low", visual: "🍚", imageUrl: GITHUB_RAW_BASE + "15.png",
+    th: {
+      q: "อาหารในข้อใดที่มีปริมาณสารแอนโทไซยานินสะสมอยู่สูงที่สุด?",
+      options: ["ข้าวโพดเหลือง และ ฟักทอง", "ผักกาดขาว และ มะละกอสุก", "ข้าวไรซ์เบอร์รี และ มะเขือยาวสีม่วง", "แครอท และ ส้ม"],
+      answer: 2,
+      explain: "แอนโทไซยานินเป็นสารสีที่ให้โทนสีแดง ม่วง และน้ำเงิน จึงพบมากในพืชที่มีสีเข้มกลุ่มนี้"
+    },
+    en: {
+      q: "Which of the following food pairs contains the highest concentration of Anthocyanins?",
+      options: ["Sweetcorn and Pumpkin", "Chinese cabbage and Ripe papaya", "Riceberry and Purple eggplant", "Carrots and Oranges"],
+      answer: 2,
+      explain: "Anthocyanins yield red, purple, and blue hues, making them abundant in deeply pigmented foods like Riceberry and purple eggplant."
+    },
+    zh: {
+      q: "下列哪种食物的花青素积累量最高？",
+      options: ["黄玉米和南瓜", "大白菜和熟木瓜", "黑紫米（Riceberry）和紫茄子", "胡萝卜和橙子"],
+      answer: 2,
+      explain: "花青素赋予食物红、紫、蓝色，因此大量存在于黑紫米和紫茄子等深色植物中。"
+    }
+  },
 
-  // --- มัธยมปลาย (5 Questions) ---
-  { id: 16, topic: "secondary-high", visual: "🔍", imageUrl: GITHUB_RAW_BASE + "16.png", q: "หากนำเซลล์กลีบดอกอัญชันไปส่องใต้กล้องจุลทรรศน์ใช้แสง จะพบสารสีแอนโทไซยานินสะสมอยู่ในออร์แกเนลล์ใดเป็นหลัก?", options: ["คลอโรพลาสต์ (Chloroplast)", "โครโมพลาสต์ (Chromoplast)", "เซนทรัลแวคิวโอล (Central Vacuole)", "ร่างแหเอนโดพลาซึม (Endoplasmic Reticulum)"], answer: "เซนทรัลแวคิวโอล (Central Vacuole)", explain: "แอนโทไซยานินเป็นสารสีที่ละลายน้ำได้ จึงสะสมอยู่ในแวคิวโอล ต่างจากคลอโรฟิลล์และแคโรทีนอยด์ที่ฝังตัวในเยื่อหุ้มไทลาคอยด์ของพลาสติด" },
-  { id: 17, topic: "secondary-high", visual: "🛡️", imageUrl: GITHUB_RAW_BASE + "17.png", q: "แอนโทไซยานินมีบทบาทสำคัญอย่างไรในกระบวนการสังเคราะห์ด้วยแสงของพืช?", options: ["เป็นศูนย์กลางปฏิกิริยา (Reaction center) ในระบบแสง I และ II", "ทำหน้าที่เป็นสารสีเสริม (Accessory pigment) ดูดกลืนแสงและช่วยป้องกันอันตรายจากแสงความเข้มสูง (Photoprotection)", "คำหน้าที่ตรึงคาร์บอนไดออกไซด์ในวัฏจักรคัลวิน", "ง. เป็นสารตั้งต้นในกระบวนการถ่ายทอดอิเล็กตรอน"], answer: "ทำหน้าที่เป็นสารสีเสริม (Accessory pigment) ดูดกลืนแสงและช่วยป้องกันอันตรายจากแสงความเข้มสูง (Photoprotection)", explain: "ช่วยดูดกลืนแสงความยาวคลื่นช่วงสีเขียว/รังสี UV เพื่อปกป้องเนื้อเยื่อพืชจากการถูกทำลายด้วยแสง" },
-  { id: 18, topic: "secondary-high", visual: "🧪", imageUrl: GITHUB_RAW_BASE + "18.png", q: "เมื่อนำน้ำสกัดจากกะหล่ำปลีสีม่วง (มีแอนโทไซยานิน) มาหยดลงในน้ำมัสตาร์ดหรือน้ำส้มสายชู (สภาวะเป็นกรด) จะสังเกตเห็นการเปลี่ยนแปลงสีอย่างไร?", options: ["เปลี่ยนจากสีม่วงเป็นสีเขียว/เหลือง", "เปลี่ยนจากสีม่วงเป็นสีชมพู/แดง", "เปลี่ยนจากสีม่วงเป็นสีฟ้า/น้ำเงิน", "ไม่เกิดการเปลี่ยนสี สียังคงเป็นสีม่วงเหมือนเดิม"], answer: "เปลี่ยนจากสีม่วงเป็นสีชมพู/แดง", explain: "ในสภาวะกรด (pH < 7) โครงสร้างแอนโทไซยานินจะอยู่ในรูป Flavylium cation ซึ่งดูดกลืนแสงแล้วสะท้อนสีแดง/ชมพูออกมา" },
-  { id: 19, topic: "secondary-high", visual: "⚛️", imageUrl: GITHUB_RAW_BASE + "19.png", q: "สารละลายแอนโทไซยานินจะเปลี่ยนสีเมื่อ pH เปลี่ยนไป เนื่องจากเหตุผลใดทางเคมี?", options: ["เกิดการสลายตัวของพันธะโควาเลนต์อย่างสมบูรณ์จนกลายเป็นไอออนเดี่ยว", "โมเลกุลมีการรับหรือสูญเสียโปรตอน (H⁺) ส่งผลให้โครงสร้างและช่วงการดูดกลืนแสงเปลี่ยนไป", "แอนโทไซยานินตกตะกอนเมื่อเจอกรดหรือเบส", "เกิดปฏิกิริยารีดอกซ์และทำให้โลหะในโมเลกุลเปลี่ยนเลขออกซิเดชัน"], answer: "โมเลกุลมีการรับหรือสูญเสียโปรตอน (H⁺) ส่งผลให้โครงสร้างและช่วงการดูดกลืนแสงเปลี่ยนไป", explain: "การรับ/สูญเสีย H⁺ ทำให้พันธะคู่สลับพันธะเดี่ยว (Conjugated system) เปลี่ยนไป ส่งผลให้ช่วงคลื่นแสงที่ดูดกลืนเปลี่ยน สีจึงเปลี่ยนตาม pH" },
-  { id: 20, topic: "secondary-high", visual: "🧬", imageUrl: GITHUB_RAW_BASE + "20.png", q: "แอนโทไซยานินจัดเป็นสารพฤกษเคมี (Phytochemical) ที่มีประโยชน์ต่อร่างกายมนุษย์ในด้านใดมากที่สุด?", options: ["เป็นแหล่งพลังงานหลักแทนคาร์โบไฮเดรต", "ช่วยทำหน้าที่เป็นสารต้านอนุมูลอิสระ (Antioxidant)", "ช่วยกระตุ้นการสร้างฮอร์โมนอินซูลินโดยตรง", "ทำหน้าที่เป็นเอนไซม์ย่อยโปรตีนในกระเพาะอาหาร"], answer: "ช่วยทำหน้าที่เป็นสารต้านอนุมูลอิสระ (Antioxidant)", explain: "แอนโทไซยานินมีโครงสร้างฟีนอลิกที่ช่วยให้อิเล็กตรอนแก่อนุมูลอิสระ ลดการอักเสบและความเสื่อมของเซลล์" }
+  // --- Secondary High (5 Questions) ---
+  {
+    id: 16, topic: "secondary-high", visual: "🔍", imageUrl: GITHUB_RAW_BASE + "16.png",
+    th: {
+      q: "หากนำเซลล์กลีบดอกอัญชันไปส่องใต้กล้องจุลทรรศน์ใช้แสง จะพบสารสีแอนโทไซยานินสะสมอยู่ในออร์แกเนลล์ใดเป็นหลัก?",
+      options: ["คลอโรพลาสต์ (Chloroplast)", "โครโมพลาสต์ (Chromoplast)", "เซนทรัลแวคิวโอล (Central Vacuole)", "ร่างแหเอนโดพลาซึม (Endoplasmic Reticulum)"],
+      answer: 2,
+      explain: "แอนโทไซยานินเป็นสารสีที่ละลายน้ำได้ จึงสะสมอยู่ในแวคิวโอล ต่างจากคลอโรฟิลล์และแคโรทีนอยด์ที่ฝังตัวในเยื่อหุ้มไทลาคอยด์ของพลาสติด"
+    },
+    en: {
+      q: "When viewing butterfly pea petal cells under a microscope, in which organelle is Anthocyanin primarily located?",
+      options: ["Chloroplast", "Chromoplast", "Central Vacuole", "Endoplasmic Reticulum"],
+      answer: 2,
+      explain: "Anthocyanin is a water-soluble pigment accumulated in the central vacuole, unlike lipophilic pigments embedded in plastids."
+    },
+    zh: {
+      q: "如果在显微镜下观察蝶豆花花瓣细胞，花青素主要积累在哪个细胞器中？",
+      options: ["叶绿体", "杂色体/有色体", "中央液泡", "内质网"],
+      answer: 2,
+      explain: "花青素是水溶性色素，积聚在中央液泡中，这与嵌入质体膜中的叶绿素和类胡萝卜素不同。"
+    }
+  },
+  {
+    id: 17, topic: "secondary-high", visual: "🛡️", imageUrl: GITHUB_RAW_BASE + "17.png",
+    th: {
+      q: "แอนโทไซยานินมีบทบาทสำคัญอย่างไรในกระบวนการสังเคราะห์ด้วยแสงของพืช?",
+      options: ["เป็นศูนย์กลางปฏิกิริยา (Reaction center) ในระบบแสง I และ II", "ทำหน้าที่เป็นสารสีเสริม (Accessory pigment) ดูดกลืนแสงและช่วยป้องกันอันตรายจากแสงความเข้มสูง (Photoprotection)", "ทำหน้าที่ตรึงคาร์บอนไดออกไซด์ในวัฏจักรคัลวิน", "เป็นสารตั้งต้นในกระบวนการถ่ายทอดอิเล็กตรอน"],
+      answer: 1,
+      explain: "ช่วยดูดกลืนแสงความยาวคลื่นช่วงสีเขียว/รังสี UV เพื่อปกป้องเนื้อเยื่อพืชจากการถูกทำลายด้วยแสง"
+    },
+    en: {
+      q: "What critical function does Anthocyanin perform regarding light management in plants?",
+      options: ["Acts as the reaction center in Photosystems I & II", "Functions as an accessory pigment providing photoprotection against high light", "Fixes carbon dioxide in the Calvin Cycle", "Serves as an electron donor in light reactions"],
+      answer: 1,
+      explain: "It absorbs excess green light and UV rays, shielding plant tissues from light-induced damage (photoprotection)."
+    },
+    zh: {
+      q: "花青素在植物光合作用及光保护中扮演什么重要角色？",
+      options: ["光系统I和II的反应中心", "作为辅助色素吸收光线，并提供强光保护（Photoprotection）", "在卡尔文循环中固定二氧化碳", "电子传递链的前体"],
+      answer: 1,
+      explain: "它吸收绿光和紫外线，保护植物组织免受强光破坏（光保护作用）。"
+    }
+  },
+  {
+    id: 18, topic: "secondary-high", visual: "🧪", imageUrl: GITHUB_RAW_BASE + "18.png",
+    th: {
+      q: "เมื่อนำน้ำสกัดจากกะหล่ำปลีสีม่วง (มีแอนโทไซยานิน) มาหยดลงในน้ำมัสตาร์ดหรือน้ำส้มสายชู (สภาวะเป็นกรด) จะสังเกตเห็นการเปลี่ยนแปลงสีอย่างไร?",
+      options: ["เปลี่ยนจากสีม่วงเป็นสีเขียว/เหลือง", "เปลี่ยนจากสีม่วงเป็นสีชมพู/แดง", "เปลี่ยนจากสีม่วงเป็นสีฟ้า/น้ำเงิน", "ไม่เกิดการเปลี่ยนสี สียังคงเป็นสีม่วงเหมือนเดิม"],
+      answer: 1,
+      explain: "ในสภาวะกรด (pH < 7) โครงสร้างแอนโทไซยานินจะอยู่ในรูป Flavylium cation ซึ่งดูดกลืนแสงแล้วสะท้อนสีแดง/ชมพูออกมา"
+    },
+    en: {
+      q: "When purple cabbage extract is dropped into vinegar or mustard solution (acidic conditions), what color shift is observed?",
+      options: ["Turns from purple to green/yellow", "Turns from purple to pink/red", "Turns from purple to blue", "No change; remains purple"],
+      answer: 1,
+      explain: "Under acidic conditions (pH < 7), anthocyanin adopts the Flavylium cation form, yielding a red/pink appearance."
+    },
+    zh: {
+      q: "将紫甘蓝提取液（含花青素）滴入醋或酸性溶液中时，会观察到怎样的颜色变化？",
+      options: ["从紫色变成绿/黄色", "从紫色变成粉/红色", "从紫色变成蓝色", "不变色，保持紫色"],
+      answer: 1,
+      explain: "在酸性条件（pH < 7）下，花青素主要以花色素阳离子（Flavylium cation）形式存在，呈现粉红色/红色。"
+    }
+  },
+  {
+    id: 19, topic: "secondary-high", visual: "⚛️", imageUrl: GITHUB_RAW_BASE + "19.png",
+    th: {
+      q: "สารละลายแอนโทไซยานินจะเปลี่ยนสีเมื่อ pH เปลี่ยนไป เนื่องจากเหตุผลใดทางเคมี?",
+      options: ["เกิดการสลายตัวของพันธะโควาเลนต์อย่างสมบูรณ์จนกลายเป็นไอออนเดี่ยว", "โมเลกุลมีการรับหรือสูญเสียโปรตอน (H⁺) ส่งผลให้โครงสร้างและช่วงการดูดกลืนแสงเปลี่ยนไป", "แอนโทไซยานินตกตะกอนเมื่อเจอกรดหรือเบส", "เกิดปฏิกิริยารีดอกซ์และทำให้โลหะในโมเลกุลเปลี่ยนเลขออกซิเดชัน"],
+      answer: 1,
+      explain: "การรับ/สูญเสีย H⁺ ทำให้พันธะคู่สลับพันธะเดี่ยว (Conjugated system) เปลี่ยนไป ส่งผลให้ช่วงคลื่นแสงที่ดูดกลืนเปลี่ยน สีจึงเปลี่ยนตาม pH"
+    },
+    en: {
+      q: "Chemically, why does an Anthocyanin solution shift colors when pH changes?",
+      options: ["Covalent bonds completely break into isolated ions", "Gain or loss of protons (H⁺) alters its conjugated structure and absorption spectra", "Anthocyanins precipitate immediately upon pH shifts", "Redox reactions modify metal oxidation states"],
+      answer: 1,
+      explain: "Protonation/deprotonation changes the conjugated double bond system, shifting light absorption wavelength."
+    },
+    zh: {
+      q: "花青素溶液随pH值改变而变色的化学原因是什么？",
+      options: ["共价键完全断裂成单离子", "质子得失（H⁺）改变了分子共轭结构及其光吸收光谱", "遇到酸碱时花青素发生沉淀", "氧化还原反应改变了金属的氧化态"],
+      answer: 1,
+      explain: "H⁺ 的获得或失去改变了分子的共轭体系，使吸收光谱发生转移，从而改变颜色。"
+    }
+  },
+  {
+    id: 20, topic: "secondary-high", visual: "🧬", imageUrl: GITHUB_RAW_BASE + "20.png",
+    th: {
+      q: "แอนโทไซยานินจัดเป็นสารพฤกษเคมี (Phytochemical) ที่มีประโยชน์ต่อร่างกายมนุษย์ในด้านใดมากที่สุด?",
+      options: ["เป็นแหล่งพลังงานหลักแทนคาร์โบไฮเดรต", "ช่วยทำหน้าที่เป็นสารต้านอนุมูลอิสระ (Antioxidant)", "ช่วยกระตุ้นการสร้างฮอร์โมนอินซูลินโดยตรง", "ทำหน้าที่เป็นเอนไซม์ย่อยโปรตีนในกระเพาะอาหาร"],
+      answer: 1,
+      explain: "แอนโทไซยานินมีโครงสร้างฟีนอลิกที่ช่วยให้อิเล็กตรอนแก่อนุมูลอิสระ ลดการอักเสบและความเสื่อมของเซลล์"
+    },
+    en: {
+      q: "As a phytochemical, what is the most notable functional benefit of Anthocyanins for human health?",
+      options: ["Serves as a primary calorie source replacing carbohydrates", "Acts as a powerful Antioxidant neutralizing free radicals", "Directly stimulates pancreatic insulin production", "Acts as a protein-digesting enzyme in the stomach"],
+      answer: 1,
+      explain: "Anthocyanins contain phenolic structures that donate electrons to stabilize free radicals, reducing cellular stress."
+    },
+    zh: {
+      q: "作为植物化学物质，花青素对人体健康最显著的功效是什么？",
+      options: ["替代碳水化合物的主要能量来源", "发挥强效抗氧化剂（Antioxidant）作用", "直接刺激胰岛素分泌", "作为胃部消化蛋白质的酶"],
+      answer: 1,
+      explain: "花青素具有酚类结构，可通过提供电子中和自由基，从而减轻炎症和细胞损伤。"
+    }
+  }
 ];
 
 // ══════════════════════════════════════════════════
@@ -513,94 +1003,58 @@ let state = {
   timer: null,
   timeLeft: 30,
   answered: false,
+  selectedOptIndex: null,
   hintsRemaining: 2,
   hintUnlockedForCurrent: false,
   lang: 'th'
 };
 
-const TOPIC_META = {
-  "primary-low":    { label: "🌱 ประถมต้น", color: "#E8A0BF" },
-  "primary-high":   { label: "🌿 ประถมปลาย", color: "#D87093" },
-  "secondary-low":  { label: "🧪 มัธยมต้น", color: "#C75B7A" },
-  "secondary-high": { label: "🔬 มัธยมปลาย", color: "#B05279" },
-  "random":         { label: "🎲 Random Mode", color: "#4A1D2F" }
-};
-
-let transCache = {};
-
 // ══════════════════════════════════════════════════
-//  TRANSLATION (TH / EN / ZH)
+//  LANGUAGE SWITCHING & UI RENDER
 // ══════════════════════════════════════════════════
 function setLanguage(lang) {
   state.lang = lang;
   document.querySelectorAll('.btn-lang').forEach(b => b.classList.remove('active'));
   document.getElementById(`lang-${lang}`).classList.add('active');
 
-  const transBox = document.getElementById('trans-q');
-  if (lang === 'th' || document.getElementById('game-arena').style.display === 'none') {
-    transBox.classList.remove('visible');
-    document.getElementById('translate-status').style.display = 'none';
-    document.querySelectorAll('.trans-opt').forEach(el => el.remove());
-  } else {
-    const q = state.pool[state.currentIndex];
-    if (q) translateCurrentQuestion(q, lang);
+  updateUIElements();
+
+  if (document.getElementById('game-arena').style.display === 'block') {
+    renderCurrentQuestionText();
+  } else if (document.getElementById('results-screen').style.display === 'block') {
+    showResults();
   }
 }
 
-async function gtranslate(text, targetLang) {
-  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=th&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
-  const res = await fetch(url);
-  const data = await res.json();
-  return data[0].map(chunk => chunk[0]).join('');
-}
+function updateUIElements() {
+  const u = UI_STRINGS[state.lang];
+  document.getElementById('ui-subtitle').textContent = u.subtitle;
+  document.getElementById('ui-select-grade').textContent = u.selectGrade;
+  
+  document.getElementById('ui-card-pl-title').textContent = u.cardPLTitle;
+  document.getElementById('ui-card-pl-desc').textContent = u.cardPLDesc;
 
-async function translateCurrentQuestion(q, lang) {
-  const transBox = document.getElementById('trans-q');
-  const status = document.getElementById('translate-status');
-  const cacheKey = `${lang}_${q.id}`;
+  document.getElementById('ui-card-ph-title').textContent = u.cardPHTitle;
+  document.getElementById('ui-card-ph-desc').textContent = u.cardPHDesc;
 
-  if (transCache[cacheKey]) {
-    applyTranslation(transCache[cacheKey]);
-    return;
+  document.getElementById('ui-card-sl-title').textContent = u.cardSLTitle;
+  document.getElementById('ui-card-sl-desc').textContent = u.cardSLDesc;
+
+  document.getElementById('ui-card-sh-title').textContent = u.cardSHTitle;
+  document.getElementById('ui-card-sh-desc').textContent = u.cardSHDesc;
+
+  document.getElementById('ui-card-rand-title').textContent = u.cardRandTitle;
+  document.getElementById('ui-card-rand-desc').textContent = u.cardRandDesc;
+
+  document.getElementById('btn-play').textContent = u.btnPlay;
+  document.getElementById('btn-skip').textContent = u.btnSkip;
+  document.getElementById('btn-next').textContent = u.btnNext;
+  document.getElementById('btn-restart').textContent = u.btnRestart;
+  document.getElementById('btn-mainmenu').textContent = u.btnMainMenu;
+
+  if (state.topic) {
+    document.getElementById('topic-label').textContent = u.topics[state.topic] || "Topic";
   }
-
-  status.textContent = '⏳ Translating...';
-  status.style.display = 'block';
-  transBox.classList.remove('visible');
-
-  try {
-    const [transQ, ...transOpts] = await Promise.all([
-      gtranslate(q.q, lang),
-      ...q.currentOptions.map(opt => gtranslate(opt, lang))
-    ]);
-    const result = { question: transQ, options: transOpts };
-    transCache[cacheKey] = result;
-    applyTranslation(result);
-  } catch(e) {
-    status.textContent = '⚠️ Translation unavailable';
-    setTimeout(() => { status.style.display = 'none'; }, 3000);
-  }
-}
-
-function applyTranslation(data) {
-  const transBox = document.getElementById('trans-q');
-  const status = document.getElementById('translate-status');
-
-  transBox.textContent = data.question;
-  transBox.classList.add('visible');
-  status.style.display = 'none';
-
-  const optBtns = document.querySelectorAll('.option-btn');
-  optBtns.forEach((btn, i) => {
-    const existing = btn.querySelector('.trans-opt');
-    if (existing) existing.remove();
-    if (data.options && data.options[i]) {
-      const span = document.createElement('span');
-      span.className = 'trans-opt';
-      span.textContent = data.options[i];
-      btn.appendChild(span);
-    }
-  });
 }
 
 // ══════════════════════════════════════════════════
@@ -611,33 +1065,34 @@ function selectTopic(el) {
   el.classList.add('selected');
   state.topic = el.dataset.topic;
   document.getElementById('btn-play').disabled = false;
+  updateUIElements();
 }
 
 function startGame() {
   let selectedPool = [];
 
   if (state.topic === "random") {
-    // Stratified Sampling: Ensure 1 question from every category
     const categories = ["primary-low", "primary-high", "secondary-low", "secondary-high"];
-    
     categories.forEach(cat => {
       const topicQuestions = QUESTIONS.filter(q => q.topic === cat);
       const randomPick = topicQuestions[Math.floor(Math.random() * topicQuestions.length)];
       selectedPool.push(randomPick);
     });
 
-    // 5th Wildcard question from remaining questions
     const remainingQuestions = QUESTIONS.filter(q => !selectedPool.includes(q));
     const wildcard = remainingQuestions[Math.floor(Math.random() * remainingQuestions.length)];
     selectedPool.push(wildcard);
 
-    // Shuffle the final selected 5 questions
     state.pool = shuffle([...selectedPool]);
   } else {
-    // Single Topic Pool Selection
     const availablePool = QUESTIONS.filter(item => item.topic === state.topic);
     state.pool = shuffle([...availablePool]).slice(0, 5);
   }
+
+  // Generate option order once per question to preserve across language switches
+  state.pool.forEach(q => {
+    q.shuffledIndices = shuffle([0, 1, 2, 3]);
+  });
 
   state.currentIndex = 0;
   state.completedCount = 0;
@@ -654,11 +1109,12 @@ function startGame() {
 }
 
 function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
+  let res = [...arr];
+  for (let i = res.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+    [res[i], res[j]] = [res[j], res[i]];
   }
-  return arr;
+  return res;
 }
 
 function renderQuestion() {
@@ -667,64 +1123,78 @@ function renderQuestion() {
     return;
   }
 
-  const q = state.pool[state.currentIndex];
-  const meta = TOPIC_META[state.topic] || { label: "General", color: "#D87093" };
-
-  q.currentOptions = shuffle([...q.options]);
-
-  document.getElementById('topic-label').textContent = meta.label;
-  document.getElementById('question-counter').textContent = `ข้อที่: ${state.completedCount + 1} / ${state.pool.length}`;
-  document.getElementById('score-display').textContent = `${state.score} pts`;
-  document.getElementById('progress-fill').style.width = `${(state.completedCount / state.pool.length) * 100}%`;
-
-  const tag = document.getElementById('q-tag');
-  tag.innerHTML = `${meta.label.split(' ')[0]} <span>${meta.label.slice(meta.label.indexOf(' ')+1)}</span>`;
-  tag.style.color = meta.color;
-
-  // Reset Image Canvas & Hint state
+  state.answered = false;
+  state.selectedOptIndex = null;
   state.hintUnlockedForCurrent = false;
+
   const roomContainer = document.getElementById('room-container');
   roomContainer.style.display = 'none';
   roomContainer.innerHTML = '';
 
-  // Reset Hint Button
   const hintBtn = document.getElementById('btn-hint');
   hintBtn.style.display = 'none';
-  document.getElementById('hints-left').textContent = state.hintsRemaining;
-  hintBtn.disabled = state.hintsRemaining <= 0;
 
-  document.getElementById('q-text').textContent = q.q;
+  const fb = document.getElementById('feedback-box');
+  fb.style.display = 'none';
+
+  const skipBtn = document.getElementById('btn-skip');
+  skipBtn.style.display = 'inline-block';
+  skipBtn.classList.remove('visible');
+
+  document.getElementById('btn-next').style.display = 'none';
+
+  renderCurrentQuestionText();
+  startTimer();
+}
+
+function renderCurrentQuestionText() {
+  const u = UI_STRINGS[state.lang];
+  const qObj = state.pool[state.currentIndex];
+  const qLang = qObj[state.lang] || qObj.th;
+
+  document.getElementById('topic-label').textContent = u.topics[state.topic];
+  document.getElementById('question-counter').textContent = `${u.qCounter}${state.completedCount + 1} / ${state.pool.length}`;
+  document.getElementById('score-display').textContent = `${state.score} pts`;
+  document.getElementById('progress-fill').style.width = `${(state.completedCount / state.pool.length) * 100}%`;
+
+  const tag = document.getElementById('q-tag');
+  tag.innerHTML = `${u.topics[qObj.topic] || qObj.topic}`;
+
+  document.getElementById('q-text').textContent = qLang.q;
 
   const grid = document.getElementById('options-grid');
   grid.innerHTML = '';
   const labels = ['A', 'B', 'C', 'D'];
-  q.currentOptions.forEach((opt, i) => {
+
+  qObj.shuffledIndices.forEach((origIdx, displayIdx) => {
     const btn = document.createElement('button');
     btn.className = 'option-btn';
-    btn.innerHTML = `<span class="opt-label">${labels[i]}</span><span>${opt}</span>`;
-    btn.onclick = () => selectAnswer(opt, btn);
+    btn.innerHTML = `<span class="opt-label">${labels[displayIdx]}</span><span>${qLang.options[origIdx]}</span>`;
+
+    if (state.answered) {
+      btn.disabled = true;
+      if (origIdx === qObj.th.answer) {
+        btn.classList.add('correct');
+      }
+      if (state.selectedOptIndex === origIdx && origIdx !== qObj.th.answer) {
+        btn.classList.add('wrong');
+      }
+    } else {
+      btn.onclick = () => selectAnswer(origIdx, btn);
+    }
     grid.appendChild(btn);
   });
 
-  const fb = document.getElementById('feedback-box');
-  fb.style.display = 'none';
-  fb.className = 'feedback-box';
-  
-  const skipBtn = document.getElementById('btn-skip');
-  skipBtn.style.display = 'inline-block';
-  skipBtn.classList.remove('visible');
-  
-  document.getElementById('btn-next').style.display = 'none';
+  const hintBtn = document.getElementById('btn-hint');
+  hintBtn.innerHTML = `${u.btnHint} (<span id="hints-left">${state.hintsRemaining}</span>/2)`;
+  if (!state.answered && state.timeLeft <= 20 && !state.hintUnlockedForCurrent && state.hintsRemaining > 0) {
+    hintBtn.style.display = 'inline-block';
+  }
 
-  const transBox = document.getElementById('trans-q');
-  transBox.classList.remove('visible');
-  transBox.textContent = '';
-  document.getElementById('translate-status').style.display = 'none';
-
-  state.answered = false;
-  startTimer();
-
-  if (state.lang !== 'th') translateCurrentQuestion(q, state.lang);
+  if (state.answered) {
+    const isCorrect = (state.selectedOptIndex === qObj.th.answer);
+    showFeedback(isCorrect, qLang);
+  }
 }
 
 // ══════════════════════════════════════════════════
@@ -732,7 +1202,7 @@ function renderQuestion() {
 // ══════════════════════════════════════════════════
 function startTimer() {
   clearInterval(state.timer);
-  state.timeLeft = 25;
+  state.timeLeft = 30;
   updateTimerDisplay();
 
   state.timer = setInterval(() => {
@@ -760,20 +1230,21 @@ function updateTimerDisplay() {
 
 function useHint() {
   if (state.hintsRemaining <= 0 || state.answered) return;
-  
+
   state.hintsRemaining--;
   state.hintUnlockedForCurrent = true;
-  
-  const q = state.pool[state.currentIndex];
-  const roomContainer = document.getElementById('room-container');
 
-  if (q.imageUrl && q.imageUrl.trim() !== '') {
-    roomContainer.innerHTML = `<img src="${q.imageUrl}" alt="Hint Image" />`;
+  const qObj = state.pool[state.currentIndex];
+  const roomContainer = document.getElementById('room-container');
+  const u = UI_STRINGS[state.lang];
+
+  if (qObj.imageUrl && qObj.imageUrl.trim() !== '') {
+    roomContainer.innerHTML = `<img src="${qObj.imageUrl}" alt="Hint Image" />`;
   } else {
     roomContainer.innerHTML = `
       <div class="room-placeholder">
-        <span style="font-size:2.5rem; margin-bottom:4px;">${q.visual || '🖼️'}</span>
-        <span>รูปภาพคำใบ้ประกอบคำถาม</span>
+        <span style="font-size:2.5rem; margin-bottom:4px;">${qObj.visual || '🖼️'}</span>
+        <span>${u.hintPlaceholder}</span>
       </div>
     `;
   }
@@ -800,32 +1271,23 @@ function skipQuestion() {
   renderQuestion();
 }
 
-function selectAnswer(selectedOptText, btn) {
+function selectAnswer(origIdx, btn) {
   if (state.answered) return;
   state.answered = true;
+  state.selectedOptIndex = origIdx;
   clearInterval(state.timer);
-  
+
   state.completedCount++;
-  const q = state.pool[state.currentIndex];
+  const qObj = state.pool[state.currentIndex];
+  const qLang = qObj[state.lang] || qObj.th;
 
-  const btns = document.querySelectorAll('.option-btn');
-  btns.forEach((b, idx) => {
-    b.disabled = true;
-    if (q.currentOptions[idx] === q.answer) {
-      b.classList.add('correct');
-    }
-  });
-
-  const correct = selectedOptText === q.answer;
+  const correct = (origIdx === qObj.th.answer);
   if (correct) {
-    btn.classList.add('correct');
     const pointsEarned = (state.timeLeft * 20) + 500;
     state.score += pointsEarned;
-    showFeedback(true, `✅ <strong>ถูกต้อง!</strong> คะแนนโบนัสความเร็ว: <strong>+${pointsEarned} pts</strong> (เหลือ ${state.timeLeft} วินาที)<br>${q.explain}`);
-  } else {
-    btn.classList.add('wrong');
-    showFeedback(false, `❌ <strong>ยังไม่ถูกต้อง!</strong> คำตอบที่ถูกต้องคือ <strong>${q.answer}</strong><br>${q.explain}`);
   }
+
+  renderCurrentQuestionText();
 
   document.getElementById('score-display').textContent = `${state.score} pts`;
   document.getElementById('btn-hint').style.display = 'none';
@@ -833,11 +1295,18 @@ function selectAnswer(selectedOptText, btn) {
   document.getElementById('btn-next').style.display = 'inline-block';
 }
 
-function showFeedback(correct, html) {
+function showFeedback(correct, qLang) {
   const fb = document.getElementById('feedback-box');
+  const u = UI_STRINGS[state.lang];
   fb.style.display = 'block';
   fb.className = `feedback-box ${correct ? 'correct-fb' : 'wrong-fb'}`;
-  fb.innerHTML = html;
+
+  if (correct) {
+    const pointsEarned = (state.timeLeft * 20) + 500;
+    fb.innerHTML = `✅ <strong>${u.correctTitle}</strong> ${u.timeBonus}: <strong>+${pointsEarned} pts</strong><br>${qLang.explain}`;
+  } else {
+    fb.innerHTML = `❌ <strong>${u.wrongTitle}</strong> ${u.correctAnswerIs}: <strong>${qLang.options[qLang.answer]}</strong><br>${qLang.explain}`;
+  }
 }
 
 function nextQuestion() {
@@ -857,20 +1326,24 @@ function showResults() {
 
   if (state.completedCount === 0 && state.skippedCount > 0) {
     seal = '🤡';
-    title = 'CHAMPION OF RUNNING AWAY';
-    msg = `"คุณกดข้ามทุกข้อเลยนะ! ลองใหม่อีกครั้งอย่างตั้งใจดูสิ"`;
+    title = state.lang === 'zh' ? '逃跑之王' : (state.lang === 'en' ? 'CHAMPION OF RUNNING AWAY' : 'CHAMPION OF RUNNING AWAY');
+    msg = state.lang === 'zh' ? '"你跳过了所有题目！再认真试一次吧！"' : (state.lang === 'en' ? '"You skipped all questions! Try again with focus!"' : '"คุณกดข้ามทุกข้อเลยนะ! ลองใหม่อีกครั้งอย่างตั้งใจดูสิ"');
   } else if (state.score >= 4700) {
-    seal = '🏆'; title = 'LIGHTNING GENIUS';
-    msg = `"ยอดเยี่ยมมาก! คุณทำคะแนนได้อย่างรวดเร็วและแม่นยำ สมกับเป็นยอดนักวิทยาศาสตร์!"`;
+    seal = '🏆';
+    title = state.lang === 'zh' ? '闪电天才' : (state.lang === 'en' ? 'LIGHTNING GENIUS' : 'LIGHTNING GENIUS');
+    msg = state.lang === 'zh' ? '"太棒了！你的回答又快又准，不愧是顶级科学家！"' : (state.lang === 'en' ? '"Outstanding! You answered quickly and accurately like a true scientist!"' : '"ยอดเยี่ยมมาก! คุณทำคะแนนได้อย่างรวดเร็วและแม่นยำ สมกับเป็นยอดนักวิทยาศาสตร์!"');
   } else if (state.score >= 3500) {
-    seal = '🥇'; title = 'SCHOLAR OF NATURE';
-    msg = `"เก่งมาก! คุณมีความรู้ทางวิทยาศาสตร์ที่ดีเยี่ยม"`;
+    seal = '🥇';
+    title = state.lang === 'zh' ? '自然学者' : (state.lang === 'en' ? 'SCHOLAR OF NATURE' : 'SCHOLAR OF NATURE');
+    msg = state.lang === 'zh' ? '"太棒了！你拥有非常扎实的科学知识！"' : (state.lang === 'en' ? '"Great job! You have excellent scientific knowledge!"' : '"เก่งมาก! คุณมีความรู้ทางวิทยาศาสตร์ที่ดีเยี่ยม"');
   } else if (state.score > 2000) {
-    seal = '🥈'; title = 'NOVICE EXPLORER';
-    msg = `"ทำได้ดี! พยายามศึกษาเพิ่มเติมอีกนิด รับรองว่าจะทำได้ดียิ่งขึ้น"`;
+    seal = '🥈';
+    title = state.lang === 'zh' ? '新手探险家' : (state.lang === 'en' ? 'NOVICE EXPLORER' : 'NOVICE EXPLORER');
+    msg = state.lang === 'zh' ? '"做得不错！稍微多复习一下，下次能做得更好！"' : (state.lang === 'en' ? '"Good job! Review a bit more and you will do even better!"' : '"ทำได้ดี! พยายามศึกษาเพิ่มเติมอีกนิด รับรองว่าจะทำได้ดียิ่งขึ้น"');
   } else {
-    seal = '📜'; title = 'KEEP LEARNING!';
-    msg = `"ไม่เป็นไรนะ! ลองกลับไปทบทวนบทเรียนแล้วมาเล่นใหม่อีกรอบได้เสมอ"`;
+    seal = '📜';
+    title = state.lang === 'zh' ? '继续努力！' : (state.lang === 'en' ? 'KEEP LEARNING!' : 'KEEP LEARNING!');
+    msg = state.lang === 'zh' ? '"没关系！温习一下知识点，随时欢迎再来挑战！"' : (state.lang === 'en' ? '"Keep going! Review the concepts and try again anytime!"' : '"ไม่เป็นไรนะ! ลองกลับไปทบทวนบทเรียนแล้วมาเล่นใหม่อีกรอบได้เสมอ"');
   }
 
   document.getElementById('results-seal').textContent = seal;
@@ -888,7 +1361,11 @@ function backToMenu() {
   document.getElementById('results-screen').style.display = 'none';
   document.getElementById('setup-screen').style.display = 'block';
   document.getElementById('game-arena').style.display = 'none';
+  updateUIElements();
 }
+
+// Initial UI load
+updateUIElements();
 </script>
 </body>
 </html>
