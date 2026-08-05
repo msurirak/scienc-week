@@ -406,7 +406,7 @@
         <div class="game-info" id="question-counter">ข้อที่: 0 / 5</div>
       </div>
       <div style="text-align:right">
-        <div class="timer-display" id="timer-display">⏱ 30s</div>
+        <div class="timer-display" id="timer-display">⏱ 25s</div>
         <div class="score-display" id="score-display">0 pts</div>
       </div>
     </div>
@@ -423,7 +423,7 @@
       <div class="feedback-box" id="feedback-box"></div>
 
       <div class="action-bar">
-        <button class="btn-action btn-hint" id="btn-hint" onclick="useHint()">💡 แสดงรูปคำใบ้ (<span id="hints-left">2</span>/2)</button>
+        <button class="btn-action btn-hint" id="btn-hint" onclick="useHint()">💡 แสดงรูปคำใบ้ (<span id="hints-left">3</span>/3)</button>
         <div>
           <button class="btn-action btn-skip" id="btn-skip" onclick="skipQuestion()">ข้ามคำถาม ⏭</button>
           <button class="btn-action btn-next" id="btn-next" onclick="nextQuestion()">ข้อถัดไป →</button>
@@ -479,8 +479,10 @@ const UI_STRINGS = {
     hintPlaceholder: "รูปภาพคำใบ้ประกอบคำถาม",
     correctTitle: "ถูกต้อง!",
     wrongTitle: "ยังไม่ถูกต้อง!",
+    skippedTitle: "ข้ามคำถามแล้ว!",
     correctAnswerIs: "คำตอบที่ถูกต้องคือ",
     timeBonus: "คะแนนโบนัสความเร็ว",
+    skipBonus: "คะแนนข้ามข้อ",
     topics: {
       "primary-low": "🌱 ประถมต้น",
       "primary-high": "🌿 ประถมปลาย",
@@ -512,8 +514,10 @@ const UI_STRINGS = {
     hintPlaceholder: "Hint image for this question",
     correctTitle: "Correct!",
     wrongTitle: "Incorrect!",
+    skippedTitle: "Question Skipped!",
     correctAnswerIs: "The correct answer is",
     timeBonus: "Speed Bonus",
+    skipBonus: "Skip Points",
     topics: {
       "primary-low": "🌱 Lower Primary",
       "primary-high": "🌿 Upper Primary",
@@ -545,8 +549,10 @@ const UI_STRINGS = {
     hintPlaceholder: "本题提示图片",
     correctTitle: "回答正确！",
     wrongTitle: "回答错误！",
+    skippedTitle: "已跳过题目！",
     correctAnswerIs: "正确答案是",
     timeBonus: "速度加分",
+    skipBonus: "跳过奖励",
     topics: {
       "primary-low": "🌱 小学低年级",
       "primary-high": "🌿 小学高年级",
@@ -619,7 +625,7 @@ const QUESTIONS = [
       explain: "Orange and yellow fruits and vegetables contain nutrients that help maintain healthy eyesight."
     },
     zh: {
-      q: "如果想保护视力、让眼睛明亮，应该选择哪种颜色的蔬菜水果？",
+      q: "ถ้า想保护视力、让眼睛明亮，应该选择哪种颜色的蔬菜水果？",
       options: ["绿色（如空心菜）", "橙黄色（如胡萝卜和南瓜）", "白色（如白萝卜）", "棕色（如蘑菇）"],
       answer: 1,
       explain: "橙黄色蔬果富含对眼睛有益的营养成分，有助于维持清晰视力。"
@@ -1003,8 +1009,9 @@ let state = {
   timer: null,
   timeLeft: 25,
   answered: false,
+  isSkipped: false,
   selectedOptIndex: null,
-  hintsRemaining: 2,
+  hintsRemaining: 3,
   hintUnlockedForCurrent: false,
   lang: 'th'
 };
@@ -1099,7 +1106,8 @@ function startGame() {
   state.skippedCount = 0;
   state.score = 0;
   state.answered = false;
-  state.hintsRemaining = 2;
+  state.isSkipped = false;
+  state.hintsRemaining = 3;
 
   document.getElementById('setup-screen').style.display = 'none';
   document.getElementById('game-arena').style.display = 'block';
@@ -1124,8 +1132,10 @@ function renderQuestion() {
   }
 
   state.answered = false;
+  state.isSkipped = false;
   state.selectedOptIndex = null;
   state.hintUnlockedForCurrent = false;
+  state.timeLeft = 25; // Reset timer value before rendering question text
 
   const roomContainer = document.getElementById('room-container');
   roomContainer.style.display = 'none';
@@ -1186,13 +1196,15 @@ function renderCurrentQuestionText() {
   });
 
   const hintBtn = document.getElementById('btn-hint');
-  hintBtn.innerHTML = `${u.btnHint} (<span id="hints-left">${state.hintsRemaining}</span>/2)`;
+  hintBtn.innerHTML = `${u.btnHint} (<span id="hints-left">${state.hintsRemaining}</span>/3)`;
   if (!state.answered && state.timeLeft <= 20 && !state.hintUnlockedForCurrent && state.hintsRemaining > 0) {
     hintBtn.style.display = 'inline-block';
+  } else if (!state.hintUnlockedForCurrent) {
+    hintBtn.style.display = 'none';
   }
 
   if (state.answered) {
-    const isCorrect = (state.selectedOptIndex === qObj.th.answer);
+    const isCorrect = (!state.isSkipped && state.selectedOptIndex === qObj.th.answer);
     showFeedback(isCorrect, qLang);
   }
 }
@@ -1202,7 +1214,7 @@ function renderCurrentQuestionText() {
 // ══════════════════════════════════════════════════
 function startTimer() {
   clearInterval(state.timer);
-  state.timeLeft = 30;
+  state.timeLeft = 25;
   updateTimerDisplay();
 
   state.timer = setInterval(() => {
@@ -1264,22 +1276,34 @@ function onTimeExpired() {
 //  SKIP & ANSWER LOGIC
 // ══════════════════════════════════════════════════
 function skipQuestion() {
-  if (state.answered || state.timeLeft > 0) return;
+  if (state.answered) return;
   clearInterval(state.timer);
+  
+  state.answered = true;
+  state.isSkipped = true;
+  state.completedCount++;
   state.skippedCount++;
-  state.currentIndex++;
-  renderQuestion();
+
+  // Add 200 points for skipping
+  state.score += 200;
+
+  renderCurrentQuestionText();
+
+  document.getElementById('score-display').textContent = `${state.score} pts`;
+  document.getElementById('btn-hint').style.display = 'none';
+  document.getElementById('btn-skip').style.display = 'none';
+  document.getElementById('btn-next').style.display = 'inline-block';
 }
 
 function selectAnswer(origIdx, btn) {
   if (state.answered) return;
   state.answered = true;
+  state.isSkipped = false;
   state.selectedOptIndex = origIdx;
   clearInterval(state.timer);
 
   state.completedCount++;
   const qObj = state.pool[state.currentIndex];
-  const qLang = qObj[state.lang] || qObj.th;
 
   const correct = (origIdx === qObj.th.answer);
   if (correct) {
@@ -1299,12 +1323,16 @@ function showFeedback(correct, qLang) {
   const fb = document.getElementById('feedback-box');
   const u = UI_STRINGS[state.lang];
   fb.style.display = 'block';
-  fb.className = `feedback-box ${correct ? 'correct-fb' : 'wrong-fb'}`;
 
-  if (correct) {
+  if (state.isSkipped) {
+    fb.className = 'feedback-box wrong-fb';
+    fb.innerHTML = `⏭️ <strong>${u.skippedTitle}</strong> (${u.skipBonus}: <strong>+200 pts</strong>)<br>${u.correctAnswerIs}: <strong>${qLang.options[qLang.answer]}</strong><br>${qLang.explain}`;
+  } else if (correct) {
+    fb.className = 'feedback-box correct-fb';
     const pointsEarned = (state.timeLeft * 20) + 500;
     fb.innerHTML = `✅ <strong>${u.correctTitle}</strong> ${u.timeBonus}: <strong>+${pointsEarned} pts</strong><br>${qLang.explain}`;
   } else {
+    fb.className = 'feedback-box wrong-fb';
     fb.innerHTML = `❌ <strong>${u.wrongTitle}</strong> ${u.correctAnswerIs}: <strong>${qLang.options[qLang.answer]}</strong><br>${qLang.explain}`;
   }
 }
