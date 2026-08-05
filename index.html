@@ -514,7 +514,7 @@
     </div>
 
     <div class="play-section">
-      <button class="btn-play" style="background:var(--parchment-dark); color:var(--ink); border-color:var(--sepia);" onclick="backToIntro()">📜 อ่านกติกา</button>
+      <button class="btn-play" id="btn-rules" style="background:var(--parchment-dark); color:var(--ink); border-color:var(--sepia);" onclick="backToIntro()">📜 อ่านกติกา</button>
       <button class="btn-play" id="btn-play" onclick="startGame()" disabled>✦ เริ่มการแข่งขัน ✦</button>
     </div>
   </div>
@@ -601,6 +601,7 @@ const UI_STRINGS = {
     cardSHDesc: "กลไกทางเคมี โครงสร้างโมเลกุล และ Photoprotection",
     cardRandTitle: "RANDOM MODE (สุ่มทุกระดับ)",
     cardRandDesc: "สุ่มคำถามจากทุกระดับชั้นเพื่อทดสอบความรู้รอบตัว!",
+    btnRules: "📜 อ่านกติกา",
     btnPlay: "✦ เริ่มการแข่งขัน ✦",
     qCounter: "ข้อที่: ",
     btnHint: "💡 แสดงรูปคำใบ้",
@@ -647,6 +648,7 @@ const UI_STRINGS = {
     cardSHDesc: "Chemical mechanisms, molecular structures, and Photoprotection",
     cardRandTitle: "RANDOM MODE (All Levels)",
     cardRandDesc: "Randomized questions from all levels to test your knowledge!",
+    btnRules: "📜 Read Rules",
     btnPlay: "✦ START QUIZ ✦",
     qCounter: "Question: ",
     btnHint: "💡 Show Hint Image",
@@ -693,6 +695,7 @@ const UI_STRINGS = {
     cardSHDesc: "化学机制、分子结构与光保护作用",
     cardRandTitle: "随机模式 (所有级别)",
     cardRandDesc: "随机抽取所有级别的题目，测试你的综合科学知识！",
+    btnRules: "📜 查看规则",
     btnPlay: "✦ 开始比赛 ✦",
     qCounter: "题目: ",
     btnHint: "💡 显示提示图片",
@@ -1232,6 +1235,7 @@ function updateUIElements() {
   document.getElementById('ui-card-rand-desc').textContent = u.cardRandDesc;
 
   // Buttons UI
+  document.getElementById('btn-rules').textContent = u.btnRules;
   document.getElementById('btn-play').textContent = u.btnPlay;
   document.getElementById('btn-skip').textContent = u.btnSkip;
   document.getElementById('btn-next').textContent = u.btnNext;
@@ -1533,7 +1537,7 @@ function showResults() {
 
   if (state.completedCount === 0 && state.skippedCount > 0) {
     seal = '🤡';
-    title = state.lang === 'zh' ? '逃跑之王' : (state.lang === 'en' ? 'CHAMPION OF RUNNING AWAY' : 'CHAMPION OF RUNNING AWAY');
+    title = state.lang === 'zh' ? '逃跑之王' : (state.lang === 'en' ? 'CHAMPION OF RUNNING AWAY' : 'จอมข้ามคำถาม');
     msg = state.lang === 'zh' ? '"你跳过了所有题目！再认真试一次吧！"' : (state.lang === 'en' ? '"You skipped all questions! Try again with focus!"' : '"คุณกดข้ามทุกข้อเลยนะ! ลองใหม่อีกครั้งอย่างตั้งใจดูสิ"');
   } else if (state.score >= 2000) {
     seal = '🍱';
@@ -1541,7 +1545,7 @@ function showResults() {
     msg = state.lang === 'zh' ? `"太棒了！你获得了 ${state.score} 分，成功解锁美食奖励！"` : (state.lang === 'en' ? `"Awesome! You scored ${state.score} points and earned your food reward!"` : `"ยอดเยี่ยมมาก! คุณทำได้ ${state.score} คะแนน ผ่านเกณฑ์ 2,000 คะแนนและได้รับรางวัลอาหารแล้ว!"`);
   } else {
     seal = '📜';
-    title = state.lang === 'zh' ? '继续努力！' : (state.lang === 'en' ? 'KEEP LEARNING!' : 'KEEP LEARNING!');
+    title = state.lang === 'zh' ? '继续努力！' : (state.lang === 'en' ? 'KEEP LEARNING!' : 'พยายามอีกนิดนะ!');
     msg = state.lang === 'zh' ? `"你获得了 ${state.score} 分，差一点就达到 2,000 分了！再试一次吧！"` : (state.lang === 'en' ? `"You scored ${state.score} points! Just a bit more to reach 2,000 points. Try again!"` : `"คุณทำได้ ${state.score} คะแนน เกือบถึง 2,000 คะแนนแล้ว! ลองพยายามใหม่อีกครั้งนะ"`);
   }
 
