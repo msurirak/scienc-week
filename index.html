@@ -67,7 +67,86 @@
     justify-content: center;
   }
 
+  /* ── FIRST PAGE / INTRO SCREEN ── */
+  #intro-screen {
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .intro-card {
+    background: #FFFFFF;
+    border: 2px solid var(--sepia-light);
+    border-radius: 10px;
+    padding: clamp(20px, 4vh, 32px) clamp(16px, 4vw, 28px);
+    box-shadow: 0 8px 28px rgba(74, 29, 47, 0.12);
+    text-align: center;
+  }
+  .intro-title {
+    font-family: 'Cinzel', 'Kanit', serif;
+    font-size: clamp(20px, 4.5vw, 28px);
+    color: var(--ink);
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+  .mission-box {
+    background: var(--parchment-dark);
+    border: 2px dashed var(--indigo);
+    border-radius: 8px;
+    padding: clamp(14px, 2.5vh, 20px);
+    margin: 16px 0;
+    text-align: center;
+  }
+  .mission-box h3 {
+    font-size: clamp(16px, 3.2vw, 20px);
+    color: var(--crimson);
+    margin-bottom: 6px;
+    font-weight: 800;
+  }
+  .mission-box p {
+    font-size: clamp(14px, 2.8vw, 17px);
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .rules-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 20px 0;
+    text-align: left;
+  }
+  .rule-item {
+    background: var(--parchment);
+    border-left: 4px solid var(--indigo);
+    padding: 12px 16px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: clamp(13px, 2.4vw, 15px);
+    color: var(--ink);
+  }
+  .rule-icon { font-size: 22px; flex-shrink: 0; }
+  .btn-continue {
+    background: var(--ink);
+    color: #FFF0F5;
+    border: 2px solid var(--sepia-light);
+    font-family: 'Kanit', sans-serif;
+    font-size: clamp(14px, 2.8vw, 16px);
+    padding: 12px 32px;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: 700;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+  .btn-continue:hover {
+    background: var(--indigo);
+    color: #FFF;
+    box-shadow: 0 4px 16px rgba(199, 91, 122, 0.4);
+  }
+
   /* ── TOPIC CARDS GRID ── */
+  #setup-screen { display: none; }
   .topic-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -115,7 +194,7 @@
   .topic-card p { font-size: clamp(11px, 2vw, 12px); color: #7A4B5C; line-height: 1.4; }
 
   /* ── PLAY BUTTON ── */
-  .play-section { text-align: center; margin-bottom: 16px; }
+  .play-section { text-align: center; margin-bottom: 16px; display: flex; justify-content: center; gap: 12px; }
   .btn-play {
     background: var(--ink);
     color: #FFF0F5;
@@ -354,7 +433,48 @@
 <!-- MAIN CONTAINER -->
 <div class="main">
 
-  <!-- SETUP SCREEN -->
+  <!-- FIRST PAGE / INTRO SCREEN -->
+  <div id="intro-screen">
+    <div class="intro-card">
+      <h2 class="intro-title" id="intro-title">ภารกิจแข่งขันตอบคำถาม 🍱</h2>
+      <p style="color:#7A4B5C; font-size: clamp(12px, 2.2vw, 14px);" id="intro-sub">อ่านกติกาและเป้าหมายการแข่งขันก่อนเริ่มเล่น!</p>
+      
+      <!-- MAIN GOAL BOX -->
+      <div class="mission-box">
+        <h3 id="mission-header">🎯 เป้าหมายหลัก (Main Goal)</h3>
+        <p id="mission-body">สะสมคะแนนให้ได้ <u>อย่างน้อย 2,000 คะแนน (2,000 pts)</u> เพื่อรับรางวัลอาหาร! 🍲</p>
+      </div>
+
+      <!-- RULES LIST -->
+      <div class="rules-grid">
+        <div class="rule-item">
+          <span class="rule-icon">✅</span>
+          <div>
+            <strong id="rule-correct-title">ตอบถูก:</strong>
+            <span id="rule-correct-desc">ได้รับอย่างน้อย <strong>500 คะแนน</strong> ต่อข้อ (+โบนัสความเร็ว)</span>
+          </div>
+        </div>
+        <div class="rule-item">
+          <span class="rule-icon">⏭️</span>
+          <div>
+            <strong id="rule-skip-title">กดข้ามข้อ:</strong>
+            <span id="rule-skip-desc">ได้รับ <strong>200 คะแนน</strong></span>
+          </div>
+        </div>
+        <div class="rule-item">
+          <span class="rule-icon">💡</span>
+          <div>
+            <strong id="rule-hint-title">ตัวช่วยคำใบ้:</strong>
+            <span id="rule-hint-desc">เริ่มต้นเกมด้วย <strong>3 คำใบ้ (3 Hints)</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-continue" id="btn-intro-continue" onclick="showSetupScreen()">ถัดไป: เลือกระดับชั้น ➔</button>
+    </div>
+  </div>
+
+  <!-- SETUP SCREEN (GRADE SELECTION) -->
   <div id="setup-screen">
     <div class="section-divider">
       <div class="divider-line"></div>
@@ -394,6 +514,7 @@
     </div>
 
     <div class="play-section">
+      <button class="btn-play" style="background:var(--parchment-dark); color:var(--ink); border-color:var(--sepia);" onclick="backToIntro()">📜 อ่านกติกา</button>
       <button class="btn-play" id="btn-play" onclick="startGame()" disabled>✦ เริ่มการแข่งขัน ✦</button>
     </div>
   </div>
@@ -458,6 +579,17 @@ const GITHUB_RAW_BASE = "https://raw.githubusercontent.com/msurirak/scienc-week/
 const UI_STRINGS = {
   th: {
     subtitle: "สัปดาห์วิทยาศาสตร์ · ฉบับอินเทอร์แอคทีฟ",
+    introTitle: "🍋‍🟩 ภารกิจแข่งขันตอบคำถาม 🌼",
+    introSub: "อ่านกติกาและเป้าหมายการแข่งขันก่อนเริ่มเล่น!",
+    missionHeader: "🎯 เป้าหมายหลัก (Main Goal)",
+    missionBody: "สะสมคะแนนให้ได้ <u>อย่างน้อย 2,000 คะแนน (2,000 pts)</u> เพื่อรับรางวัลอาหาร! 🍵",
+    ruleCorrectTitle: "ตอบถูกต้อง:",
+    ruleCorrectDesc: "ได้รับอย่างน้อย <strong>500 คะแนน</strong> ต่อข้อ (+โบนัสความเร็ว)",
+    ruleSkipTitle: "กดข้ามข้อ:",
+    ruleSkipDesc: "ได้รับ <strong>200 คะแนน</strong>",
+    ruleHintTitle: "ตัวช่วยคำใบ้:",
+    ruleHintDesc: "เริ่มต้นเกมด้วย <strong>3 คำใบ้ (3 Hints)</strong>",
+    btnIntroContinue: "ถัดไป: เลือกระดับชั้น ➔",
     selectGrade: "เลือกระดับชั้น (Select Grade Level)",
     cardPLTitle: "ประถมต้น",
     cardPLDesc: "เรียนรู้เรื่องสีของพืช ผักผลไม้ และหน้าที่เบื้องต้น",
@@ -493,6 +625,17 @@ const UI_STRINGS = {
   },
   en: {
     subtitle: "Science Week · Interactive Edition",
+    introTitle: "🍋‍🟩 Food Reward Quest 🌼",
+    introSub: "Read the goals and rules before starting!",
+    missionHeader: "🎯 Main Goal",
+    missionBody: "Reach <u>at least 2,000 Points (2,000 pts)</u> to get drink! 🍵",
+    ruleCorrectTitle: "Correct Answer:",
+    ruleCorrectDesc: "Earn at least <strong>500 Points</strong> per question (+ Speed Bonus)",
+    ruleSkipTitle: "Skip Question:",
+    ruleSkipDesc: "Earn <strong>200 Points</strong>",
+    ruleHintTitle: "Hints Available:",
+    ruleHintDesc: "Start the game with <strong>3 Hints</strong>",
+    btnIntroContinue: "Next: Select Grade ➔",
     selectGrade: "Select Grade Level",
     cardPLTitle: "Lower Primary",
     cardPLDesc: "Learn about plant colors, fruits & vegetables, and basic functions",
@@ -528,6 +671,17 @@ const UI_STRINGS = {
   },
   zh: {
     subtitle: "科学周 · 互动体验版",
+    introTitle: "🍋‍🟩 美食奖励挑战 🌼",
+    introSub: "开始答题前请先了解游戏规则与目标！",
+    missionHeader: "🎯 主要目标 (Main Goal)",
+    missionBody: "获得 <u>至少 2,000 分 (2,000 pts)</u> 即可领取饮料! 🍵",
+    ruleCorrectTitle: "回答正确：",
+    ruleCorrectDesc: "每题获得至少 <strong>500 分</strong>（附带速度加分）",
+    ruleSkipTitle: "跳过题目：",
+    ruleSkipDesc: "获得 <strong>200 分</strong>",
+    ruleHintTitle: "提示道具：",
+    ruleHintDesc: "游戏开始时拥有 <strong>3 次提示 (3 Hints)</strong>",
+    btnIntroContinue: "下一步：选择年级 ➔",
     selectGrade: "选择年级 (Select Grade Level)",
     cardPLTitle: "小学低年级",
     cardPLDesc: "学习植物、蔬菜和水果的颜色及其基本功能",
@@ -1017,8 +1171,22 @@ let state = {
 };
 
 // ══════════════════════════════════════════════════
-//  LANGUAGE SWITCHING & UI RENDER
+//  NAVIGATION & LANGUAGE SWITCHING
 // ══════════════════════════════════════════════════
+function showSetupScreen() {
+  document.getElementById('intro-screen').style.display = 'none';
+  document.getElementById('setup-screen').style.display = 'block';
+  document.getElementById('game-arena').style.display = 'none';
+  document.getElementById('results-screen').style.display = 'none';
+}
+
+function backToIntro() {
+  document.getElementById('intro-screen').style.display = 'block';
+  document.getElementById('setup-screen').style.display = 'none';
+  document.getElementById('game-arena').style.display = 'none';
+  document.getElementById('results-screen').style.display = 'none';
+}
+
 function setLanguage(lang) {
   state.lang = lang;
   document.querySelectorAll('.btn-lang').forEach(b => b.classList.remove('active'));
@@ -1036,23 +1204,34 @@ function setLanguage(lang) {
 function updateUIElements() {
   const u = UI_STRINGS[state.lang];
   document.getElementById('ui-subtitle').textContent = u.subtitle;
-  document.getElementById('ui-select-grade').textContent = u.selectGrade;
   
+  // First Page / Intro Screen UI
+  document.getElementById('intro-title').textContent = u.introTitle;
+  document.getElementById('intro-sub').textContent = u.introSub;
+  document.getElementById('mission-header').textContent = u.missionHeader;
+  document.getElementById('mission-body').innerHTML = u.missionBody;
+  document.getElementById('rule-correct-title').textContent = u.ruleCorrectTitle;
+  document.getElementById('rule-correct-desc').innerHTML = u.ruleCorrectDesc;
+  document.getElementById('rule-skip-title').textContent = u.ruleSkipTitle;
+  document.getElementById('rule-skip-desc').innerHTML = u.ruleSkipDesc;
+  document.getElementById('rule-hint-title').textContent = u.ruleHintTitle;
+  document.getElementById('rule-hint-desc').innerHTML = u.ruleHintDesc;
+  document.getElementById('btn-intro-continue').textContent = u.btnIntroContinue;
+
+  // Grade Setup UI
+  document.getElementById('ui-select-grade').textContent = u.selectGrade;
   document.getElementById('ui-card-pl-title').textContent = u.cardPLTitle;
   document.getElementById('ui-card-pl-desc').textContent = u.cardPLDesc;
-
   document.getElementById('ui-card-ph-title').textContent = u.cardPHTitle;
   document.getElementById('ui-card-ph-desc').textContent = u.cardPHDesc;
-
   document.getElementById('ui-card-sl-title').textContent = u.cardSLTitle;
   document.getElementById('ui-card-sl-desc').textContent = u.cardSLDesc;
-
   document.getElementById('ui-card-sh-title').textContent = u.cardSHTitle;
   document.getElementById('ui-card-sh-desc').textContent = u.cardSHDesc;
-
   document.getElementById('ui-card-rand-title').textContent = u.cardRandTitle;
   document.getElementById('ui-card-rand-desc').textContent = u.cardRandDesc;
 
+  // Buttons UI
   document.getElementById('btn-play').textContent = u.btnPlay;
   document.getElementById('btn-skip').textContent = u.btnSkip;
   document.getElementById('btn-next').textContent = u.btnNext;
@@ -1096,7 +1275,6 @@ function startGame() {
     state.pool = shuffle([...availablePool]).slice(0, 5);
   }
 
-  // Generate option order once per question to preserve across language switches
   state.pool.forEach(q => {
     q.shuffledIndices = shuffle([0, 1, 2, 3]);
   });
@@ -1109,6 +1287,7 @@ function startGame() {
   state.isSkipped = false;
   state.hintsRemaining = 3;
 
+  document.getElementById('intro-screen').style.display = 'none';
   document.getElementById('setup-screen').style.display = 'none';
   document.getElementById('game-arena').style.display = 'block';
   document.getElementById('results-screen').style.display = 'none';
@@ -1135,7 +1314,7 @@ function renderQuestion() {
   state.isSkipped = false;
   state.selectedOptIndex = null;
   state.hintUnlockedForCurrent = false;
-  state.timeLeft = 25; // Reset timer value before rendering question text
+  state.timeLeft = 25;
 
   const roomContainer = document.getElementById('room-container');
   roomContainer.style.display = 'none';
@@ -1356,22 +1535,14 @@ function showResults() {
     seal = '🤡';
     title = state.lang === 'zh' ? '逃跑之王' : (state.lang === 'en' ? 'CHAMPION OF RUNNING AWAY' : 'CHAMPION OF RUNNING AWAY');
     msg = state.lang === 'zh' ? '"你跳过了所有题目！再认真试一次吧！"' : (state.lang === 'en' ? '"You skipped all questions! Try again with focus!"' : '"คุณกดข้ามทุกข้อเลยนะ! ลองใหม่อีกครั้งอย่างตั้งใจดูสิ"');
-  } else if (state.score >= 4700) {
-    seal = '🏆';
-    title = state.lang === 'zh' ? '闪电天才' : (state.lang === 'en' ? 'LIGHTNING GENIUS' : 'LIGHTNING GENIUS');
-    msg = state.lang === 'zh' ? '"太棒了！你的回答又快又准，不愧是顶级科学家！"' : (state.lang === 'en' ? '"Outstanding! You answered quickly and accurately like a true scientist!"' : '"ยอดเยี่ยมมาก! คุณทำคะแนนได้อย่างรวดเร็วและแม่นยำ สมกับเป็นยอดนักวิทยาศาสตร์!"');
-  } else if (state.score >= 3500) {
-    seal = '🥇';
-    title = state.lang === 'zh' ? '自然学者' : (state.lang === 'en' ? 'SCHOLAR OF NATURE' : 'SCHOLAR OF NATURE');
-    msg = state.lang === 'zh' ? '"太棒了！你拥有非常扎实的科学知识！"' : (state.lang === 'en' ? '"Great job! You have excellent scientific knowledge!"' : '"เก่งมาก! คุณมีความรู้ทางวิทยาศาสตร์ที่ดีเยี่ยม"');
-  } else if (state.score > 2000) {
-    seal = '🥈';
-    title = state.lang === 'zh' ? '新手探险家' : (state.lang === 'en' ? 'NOVICE EXPLORER' : 'NOVICE EXPLORER');
-    msg = state.lang === 'zh' ? '"做得不错！稍微多复习一下，下次能做得更好！"' : (state.lang === 'en' ? '"Good job! Review a bit more and you will do even better!"' : '"ทำได้ดี! พยายามศึกษาเพิ่มเติมอีกนิด รับรองว่าจะทำได้ดียิ่งขึ้น"');
+  } else if (state.score >= 2000) {
+    seal = '🍱';
+    title = state.lang === 'zh' ? '任务成功！获得美食 🍲' : (state.lang === 'en' ? 'QUEST COMPLETE! FOOD UNLOCKED 🍲' : 'ภารกิจสำเร็จ! คุณได้รับรางวัลอาหาร 🍲');
+    msg = state.lang === 'zh' ? `"太棒了！你获得了 ${state.score} 分，成功解锁美食奖励！"` : (state.lang === 'en' ? `"Awesome! You scored ${state.score} points and earned your food reward!"` : `"ยอดเยี่ยมมาก! คุณทำได้ ${state.score} คะแนน ผ่านเกณฑ์ 2,000 คะแนนและได้รับรางวัลอาหารแล้ว!"`);
   } else {
     seal = '📜';
     title = state.lang === 'zh' ? '继续努力！' : (state.lang === 'en' ? 'KEEP LEARNING!' : 'KEEP LEARNING!');
-    msg = state.lang === 'zh' ? '"没关系！温习一下知识点，随时欢迎再来挑战！"' : (state.lang === 'en' ? '"Keep going! Review the concepts and try again anytime!"' : '"ไม่เป็นไรนะ! ลองกลับไปทบทวนบทเรียนแล้วมาเล่นใหม่อีกรอบได้เสมอ"');
+    msg = state.lang === 'zh' ? `"你获得了 ${state.score} 分，差一点就达到 2,000 分了！再试一次吧！"` : (state.lang === 'en' ? `"You scored ${state.score} points! Just a bit more to reach 2,000 points. Try again!"` : `"คุณทำได้ ${state.score} คะแนน เกือบถึง 2,000 คะแนนแล้ว! ลองพยายามใหม่อีกครั้งนะ"`);
   }
 
   document.getElementById('results-seal').textContent = seal;
@@ -1386,9 +1557,7 @@ function restart() {
 
 function backToMenu() {
   clearInterval(state.timer);
-  document.getElementById('results-screen').style.display = 'none';
-  document.getElementById('setup-screen').style.display = 'block';
-  document.getElementById('game-arena').style.display = 'none';
+  backToIntro();
   updateUIElements();
 }
 
